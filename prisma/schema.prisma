@@ -1,0 +1,605 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum USERTYPE {
+  LANDLORD
+  CLIENT 
+  CARETAKER
+}
+model User {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String?
+
+  user_type USERTYPE @default(CLIENT)
+}
+
+model accounts {
+  accounts                             Int      @id @default(autoincrement())
+  landlord                             Int      @unique(map: "landlord")
+  bank_name                            String   @db.VarChar(200)
+  bank_branch                          String?  @db.VarChar(200)
+  acc_name                             String   @unique(map: "acc_name") @db.VarChar(200)
+  acc_num                              Int      @unique(map: "acc_num")
+  landlord_accounts_landlordTolandlord landlord @relation("accounts_landlordTolandlord", fields: [landlord], references: [landlord], onDelete: NoAction, onUpdate: NoAction, map: "accounts_ibfk_1")
+}
+
+model accumulator {
+  accumulator                          Int     @id @default(autoincrement())
+  loan                                 Int     @unique(map: "loan")
+  invoice                              Int     @unique(map: "invoice")
+  total                                Float
+  charge                               Float
+  loan_accumulator_loanToloan          loan    @relation("accumulator_loanToloan", fields: [loan], references: [loan], onDelete: NoAction, onUpdate: NoAction, map: "accumulator_ibfk_2")
+  invoice_accumulator_invoiceToinvoice invoice @relation("accumulator_invoiceToinvoice", fields: [invoice], references: [invoice], onDelete: NoAction, onUpdate: NoAction, map: "accumulator_ibfk_3")
+}
+
+model agent {
+  agent                          Int       @id @default(autoincrement())
+  username                       String    @unique(map: "username") @db.VarChar(200)
+  name                           String    @db.VarChar(100)
+  title                          String    @db.VarChar(100)
+  property_property_agentToagent property? @relation("property_agentToagent")
+}
+
+model agreement {
+  agreement                       Int       @id @default(autoincrement())
+  room                            Int
+  client                          Int
+  amount                          Float?
+  start_date                      DateTime  @db.Date
+  duration                        Int?
+  review                          Int?
+  terminated                      DateTime? @db.Date
+  valid                           Int
+  comment                         String?   @db.VarChar(255)
+  room_agreement_roomToroom       room      @relation("agreement_roomToroom", fields: [room], references: [room], onDelete: NoAction, onUpdate: NoAction, map: "agreement_ibfk_1")
+  client_agreement_clientToclient client    @relation("agreement_clientToclient", fields: [client], references: [client], onDelete: NoAction, onUpdate: NoAction, map: "agreement_ibfk_2")
+  loan_loan_agreementToagreement  loan[]    @relation("loan_agreementToagreement")
+  rent_rent_agreementToagreement  rent[]    @relation("rent_agreementToagreement")
+
+  @@unique([client, room, start_date], map: "identification1")
+  @@index([room], map: "room")
+}
+
+model balance_initial {
+  balance_initial                          Int       @id @default(autoincrement())
+  client                                   Int
+  invoice                                  Int?
+  date_g                                   DateTime? @db.Date
+  amount_g                                 Float?
+  amount_v                                 Float?
+  amount                                   Float?
+  date_v                                   DateTime? @db.Date
+  comment                                  String?   @db.VarChar(255)
+  date                                     DateTime  @db.Date
+  client_balance_initial_clientToclient    client    @relation("balance_initial_clientToclient", fields: [client], references: [client], onDelete: NoAction, onUpdate: NoAction, map: "balance_initial_ibfk_1")
+  invoice_balance_initial_invoiceToinvoice invoice?  @relation("balance_initial_invoiceToinvoice", fields: [invoice], references: [invoice], onDelete: NoAction, onUpdate: NoAction, map: "balance_initial_ibfk_2")
+
+  @@unique([client, date], map: "identification2")
+  @@index([invoice], map: "invoice")
+}
+
+model business {
+  business          Int     @id @default(autoincrement())
+  name              String  @unique(map: "identification13") @db.VarChar(255)
+  ceo               String? @unique(map: "identification23") @db.VarChar(255)
+  consumption       Float?
+  market_rent_price Float?
+  water_cost        Float?
+  is_current        Int
+}
+
+model caretaker {
+  caretaker Int     @id @default(autoincrement())
+  username  String  @unique(map: "username") @db.VarChar(200)
+  name      String? @db.VarChar(100)
+  title     String? @db.VarChar(100)
+}
+
+model changes {
+  pk        Int               @unique(map: "id")
+  source    String            @db.Text
+  operation changes_operation
+  datetime  DateTime          @default(now()) @db.DateTime(0)
+}
+
+model charge {
+  charge                          Int     @id @default(autoincrement())
+  service                         Int
+  invoice                         Int
+  name                            String? @db.VarChar(255)
+  price                           Float?
+  factor                          Float?
+  amount                          Float?
+  service_charge_serviceToservice service @relation("charge_serviceToservice", fields: [service], references: [service], onDelete: NoAction, onUpdate: NoAction, map: "charge_ibfk_1")
+  invoice_charge_invoiceToinvoice invoice @relation("charge_invoiceToinvoice", fields: [invoice], references: [invoice], onDelete: NoAction, onUpdate: NoAction, map: "charge_ibfk_2")
+
+  @@unique([invoice, service], map: "id4")
+  @@index([service], map: "service")
+}
+
+model client {
+  client                                         Int               @id @default(autoincrement())
+  name                                           String            @unique(map: "id5") @db.VarChar(255)
+  title                                          String?           @db.VarChar(255)
+  quarterly                                      Int
+  contact                                        String?           @db.VarChar(255)
+  phone                                          String?           @db.VarChar(255)
+  address                                        String?           @db.VarChar(255)
+  email                                          String?           @db.VarChar(255)
+  agreement_agreement_clientToclient             agreement[]       @relation("agreement_clientToclient")
+  balance_initial_balance_initial_clientToclient balance_initial[] @relation("balance_initial_clientToclient")
+  communications_communications_clientToclient   communications[]  @relation("communications_clientToclient")
+  credit_credit_clientToclient                   credit[]          @relation("credit_clientToclient")
+  debit_debit_clientToclient                     debit[]           @relation("debit_clientToclient")
+  invoice_invoice_clientToclient                 invoice[]         @relation("invoice_clientToclient")
+  mobile_mobile_clientToclient                   mobile[]          @relation("mobile_clientToclient")
+  payment_payment_clientToclient                 payment[]         @relation("payment_clientToclient")
+  subscription_subscription_clientToclient       subscription[]    @relation("subscription_clientToclient")
+}
+
+model closing_balance {
+  closing_balance                          Int     @id @default(autoincrement())
+  invoice                                  Int     @unique(map: "id6")
+  amount                                   Float?
+  posted                                   Int
+  invoice_closing_balance_invoiceToinvoice invoice @relation("closing_balance_invoiceToinvoice", fields: [invoice], references: [invoice], onDelete: NoAction, onUpdate: NoAction, map: "closing_balance_ibfk_1")
+}
+
+model communications {
+  communications                       Int    @id
+  client                               Int
+  ref                                  String @db.VarChar(100)
+  client_communications_clientToclient client @relation("communications_clientToclient", fields: [client], references: [client], onDelete: NoAction, onUpdate: NoAction, map: "communications_ibfk_1")
+
+  @@index([client], map: "client")
+}
+
+model credit {
+  credit                          Int      @id @default(autoincrement())
+  client                          Int
+  invoice                         Int?
+  reason                          String   @db.VarChar(255)
+  date                            DateTime @db.Date
+  amount                          Float?
+  client_credit_clientToclient    client   @relation("credit_clientToclient", fields: [client], references: [client], onDelete: NoAction, onUpdate: NoAction, map: "credit_ibfk_1")
+  invoice_credit_invoiceToinvoice invoice? @relation("credit_invoiceToinvoice", fields: [invoice], references: [invoice], onDelete: NoAction, onUpdate: NoAction, map: "credit_ibfk_2")
+
+  @@unique([client, reason, date], map: "id7")
+  @@index([invoice], map: "invoice")
+}
+
+model debit {
+  debit                          Int      @id @default(autoincrement())
+  client                         Int
+  invoice                        Int?
+  reason                         String   @db.VarChar(255)
+  date                           DateTime @db.Date
+  amount                         Float?
+  client_debit_clientToclient    client   @relation("debit_clientToclient", fields: [client], references: [client], onDelete: NoAction, onUpdate: NoAction, map: "debit_ibfk_1")
+  invoice_debit_invoiceToinvoice invoice? @relation("debit_invoiceToinvoice", fields: [invoice], references: [invoice], onDelete: NoAction, onUpdate: NoAction, map: "debit_ibfk_2")
+
+  @@unique([client, reason, date], map: "id8")
+  @@index([invoice], map: "invoice")
+}
+
+model eaccount {
+  eaccount                                   Int           @id @default(autoincrement())
+  num                                        String        @unique(map: "id9") @db.VarChar(255)
+  name                                       String?       @db.VarChar(255)
+  is_invalid                                 Int
+  comment                                    String?       @db.VarChar(255)
+  source                                     String?       @db.VarChar(255)
+  ebill_ebill_eaccountToeaccount             ebill[]       @relation("ebill_eaccountToeaccount")
+  electricity_electricity_eaccountToeaccount electricity[] @relation("electricity_eaccountToeaccount")
+  elink_elink_eaccountToeaccount             elink[]       @relation("elink_eaccountToeaccount")
+}
+
+model ebill {
+  ebill                             Int      @id @default(autoincrement())
+  msg                               Int?
+  eaccount                          Int
+  invoice                           Int?
+  due_date                          DateTime @db.Date
+  current_amount                    Float?
+  msg_ebill_msgTomsg                msg?     @relation("ebill_msgTomsg", fields: [msg], references: [msg], onDelete: NoAction, onUpdate: NoAction, map: "ebill_ibfk_1")
+  eaccount_ebill_eaccountToeaccount eaccount @relation("ebill_eaccountToeaccount", fields: [eaccount], references: [eaccount], onDelete: NoAction, onUpdate: NoAction, map: "ebill_ibfk_2")
+  invoice_ebill_invoiceToinvoice    invoice? @relation("ebill_invoiceToinvoice", fields: [invoice], references: [invoice], onDelete: NoAction, onUpdate: NoAction, map: "ebill_ibfk_3")
+
+  @@unique([eaccount, due_date], map: "identification10")
+  @@index([invoice], map: "invoice")
+  @@index([msg], map: "msg")
+}
+
+model econnection {
+  econnection                       Int       @id @default(autoincrement())
+  room                              Int
+  emeter                            Int
+  rate                              Int?
+  start_date                        DateTime? @db.Date
+  end_date                          DateTime  @db.Date
+  start_reading                     Int?
+  share                             Int?
+  room_econnection_roomToroom       room      @relation("econnection_roomToroom", fields: [room], references: [room], onDelete: NoAction, onUpdate: NoAction, map: "econnection_ibfk_1")
+  emeter_econnection_emeterToemeter emeter    @relation("econnection_emeterToemeter", fields: [emeter], references: [emeter], onDelete: NoAction, onUpdate: NoAction, map: "econnection_ibfk_2")
+
+  @@unique([room, emeter, end_date], map: "id11")
+  @@index([emeter], map: "emeter")
+  @@index([end_date], map: "end_date")
+  @@index([room], map: "room")
+}
+
+model electricity {
+  electricity                             Int       @id @default(autoincrement())
+  eaccount                                Int
+  invoice                                 Int
+  eaccount_no                             String?   @db.VarChar(30)
+  emeter_no                               String?   @db.VarChar(30)
+  due_date                                DateTime? @db.Date
+  payable_to_kplc                         Float?
+  sharing                                 String?   @db.VarChar(20)
+  amount                                  Float?
+  eaccount_electricity_eaccountToeaccount eaccount  @relation("electricity_eaccountToeaccount", fields: [eaccount], references: [eaccount], onDelete: NoAction, onUpdate: NoAction, map: "electricity_ibfk_1")
+  invoice_electricity_invoiceToinvoice    invoice   @relation("electricity_invoiceToinvoice", fields: [invoice], references: [invoice], onDelete: NoAction, onUpdate: NoAction, map: "electricity_ibfk_2")
+
+  @@unique([eaccount, invoice], map: "id12")
+  @@index([invoice], map: "invoice")
+}
+
+model elink {
+  elink                             Int      @id @default(autoincrement())
+  emeter                            Int
+  eaccount                          Int
+  origin                            String?  @db.VarChar(255)
+  emeter_elink_emeterToemeter       emeter   @relation("elink_emeterToemeter", fields: [emeter], references: [emeter], onDelete: NoAction, onUpdate: NoAction, map: "elink_ibfk_1")
+  eaccount_elink_eaccountToeaccount eaccount @relation("elink_eaccountToeaccount", fields: [eaccount], references: [eaccount], onDelete: NoAction, onUpdate: NoAction, map: "elink_ibfk_2")
+
+  @@unique([emeter, eaccount], map: "id13")
+  @@index([eaccount], map: "eaccount")
+}
+
+model emeter {
+  emeter                                 Int           @id @default(autoincrement())
+  num                                    String        @unique(map: "id14") @db.VarChar(50)
+  uid                                    Int?
+  name                                   String?       @db.VarChar(255)
+  is_invalid                             Int
+  comment                                String?       @db.VarChar(255)
+  source                                 String?       @db.VarChar(255)
+  new_num                                String?       @unique(map: "id") @db.VarChar(50)
+  econnection_econnection_emeterToemeter econnection[] @relation("econnection_emeterToemeter")
+  elink_elink_emeterToemeter             elink[]       @relation("elink_emeterToemeter")
+  ereading_ereading_emeterToemeter       ereading[]    @relation("ereading_emeterToemeter")
+}
+
+model ereading {
+  ereading                          Int      @id @default(autoincrement())
+  emeter                            Int
+  invoice                           Int?
+  date                              DateTime @db.Date
+  value                             Float?
+  remark                            String?  @db.VarChar(255)
+  emeter_ereading_emeterToemeter    emeter   @relation("ereading_emeterToemeter", fields: [emeter], references: [emeter], onDelete: NoAction, onUpdate: NoAction, map: "ereading_ibfk_1")
+  invoice_ereading_invoiceToinvoice invoice? @relation("ereading_invoiceToinvoice", fields: [invoice], references: [invoice], onDelete: NoAction, onUpdate: NoAction, map: "ereading_ibfk_2")
+
+  @@unique([emeter, date], map: "identification15")
+  @@index([invoice], map: "invoice")
+}
+
+model invoice {
+  invoice                                          Int               @id @default(autoincrement())
+  client                                           Int
+  period                                           Int
+  is_valid                                         Int
+  accumulator_accumulator_invoiceToinvoice         accumulator?      @relation("accumulator_invoiceToinvoice")
+  balance_initial_balance_initial_invoiceToinvoice balance_initial[] @relation("balance_initial_invoiceToinvoice")
+  charge_charge_invoiceToinvoice                   charge[]          @relation("charge_invoiceToinvoice")
+  closing_balance_closing_balance_invoiceToinvoice closing_balance?  @relation("closing_balance_invoiceToinvoice")
+  credit_credit_invoiceToinvoice                   credit[]          @relation("credit_invoiceToinvoice")
+  debit_debit_invoiceToinvoice                     debit[]           @relation("debit_invoiceToinvoice")
+  ebill_ebill_invoiceToinvoice                     ebill[]           @relation("ebill_invoiceToinvoice")
+  electricity_electricity_invoiceToinvoice         electricity[]     @relation("electricity_invoiceToinvoice")
+  ereading_ereading_invoiceToinvoice               ereading[]        @relation("ereading_invoiceToinvoice")
+  client_invoice_clientToclient                    client            @relation("invoice_clientToclient", fields: [client], references: [client], onDelete: NoAction, onUpdate: NoAction, map: "invoice_ibfk_1")
+  period_invoice_periodToperiod                    period            @relation("invoice_periodToperiod", fields: [period], references: [period], onDelete: NoAction, onUpdate: NoAction, map: "invoice_ibfk_2")
+  note_note_invoiceToinvoice                       note?             @relation("note_invoiceToinvoice")
+  payment_payment_invoiceToinvoice                 payment[]         @relation("payment_invoiceToinvoice")
+  rent_rent_invoiceToinvoice                       rent[]            @relation("rent_invoiceToinvoice")
+  repayment_repayment_invoiceToinvoice             repayment?        @relation("repayment_invoiceToinvoice")
+  water_water_invoiceToinvoice                     water[]           @relation("water_invoiceToinvoice")
+  wreading_wreading_invoiceToinvoice               wreading[]        @relation("wreading_invoiceToinvoice")
+
+  @@unique([client, period, is_valid], map: "id16")
+  @@index([period], map: "period")
+}
+
+model job {
+  job    Int     @id @default(autoincrement())
+  name   String  @unique(map: "id17") @db.VarChar(255)
+  dbname String? @db.VarChar(255)
+  sql    String? @db.VarChar(255)
+}
+
+model landlord {
+  landlord                             Int       @id @default(autoincrement())
+  name                                 String?   @db.VarChar(100)
+  title                                Int?
+  username                             String    @unique(map: "username") @db.VarChar(200)
+  paybill                              Int       @unique(map: "paybill")
+  accounts_accounts_landlordTolandlord accounts? @relation("accounts_landlordTolandlord")
+  property_property_landlordTolandlord property? @relation("property_landlordTolandlord")
+}
+
+model loan {
+  loan                                Int          @id @default(autoincrement())
+  agreement                           Int
+  amount                              Float
+  instalment                          Int
+  start_date                          DateTime     @db.Date
+  accumulator_accumulator_loanToloan  accumulator? @relation("accumulator_loanToloan")
+  agreement_loan_agreementToagreement agreement    @relation("loan_agreementToagreement", fields: [agreement], references: [agreement], onDelete: NoAction, onUpdate: NoAction, map: "loan_ibfk_1")
+  repayment_repayment_loanToloan      repayment?   @relation("repayment_loanToloan")
+
+  @@index([agreement], map: "agreement")
+}
+
+model mobile {
+  mobile                       Int     @id @default(autoincrement())
+  client                       Int?
+  num                          String  @unique(map: "id18") @db.VarChar(30)
+  contact                      String? @db.VarChar(30)
+  client_mobile_clientToclient client? @relation("mobile_clientToclient", fields: [client], references: [client], onDelete: NoAction, onUpdate: NoAction, map: "mobile_ibfk_1")
+
+  @@index([client], map: "client")
+}
+
+model msg {
+  msg                  Int       @id @default(autoincrement())
+  id                   String    @unique(map: "id19") @db.VarChar(32)
+  body                 String?   @db.LongText
+  date                 DateTime? @db.Date
+  ebill_ebill_msgTomsg ebill[]   @relation("ebill_msgTomsg")
+}
+
+model note {
+  note                          Int     @id @default(autoincrement())
+  invoice                       Int     @unique(map: "id20")
+  info                          String? @db.LongText
+  invoice_note_invoiceToinvoice invoice @relation("note_invoiceToinvoice", fields: [invoice], references: [invoice], onDelete: NoAction, onUpdate: NoAction, map: "note_ibfk_1")
+}
+
+model payment {
+  payment                          Int      @id @default(autoincrement())
+  client                           Int
+  invoice                          Int?
+  date                             DateTime @db.Date
+  bank                             String?  @db.VarChar(255)
+  amount                           Float?
+  type                             String?  @db.VarChar(20)
+  ref                              String   @db.VarChar(30)
+  description                      String?  @db.VarChar(50)
+  client_payment_clientToclient    client   @relation("payment_clientToclient", fields: [client], references: [client], onDelete: NoAction, onUpdate: NoAction, map: "payment_ibfk_1")
+  invoice_payment_invoiceToinvoice invoice? @relation("payment_invoiceToinvoice", fields: [invoice], references: [invoice], onDelete: NoAction, onUpdate: NoAction, map: "payment_ibfk_2")
+
+  @@unique([client, date], map: "id21")
+  @@index([invoice], map: "invoice")
+  @@index([ref], map: "ref")
+}
+
+model period {
+  period                         Int       @id @default(autoincrement())
+  year                           Int
+  month                          Int
+  cutoff                         DateTime? @db.Date
+  invoice_invoice_periodToperiod invoice[] @relation("invoice_periodToperiod")
+
+  @@unique([year, month], map: "identification22")
+}
+
+model picture {
+  picture                 Int     @id @default(autoincrement())
+  room                    Int
+  name                    String  @db.VarChar(50)
+  elevation               String? @db.VarChar(50)
+  room_picture_roomToroom room    @relation("picture_roomToroom", fields: [room], references: [room], onDelete: NoAction, onUpdate: NoAction, map: "picture_ibfk_1")
+
+  @@unique([room, name], map: "identification23")
+}
+
+model product {
+  id          Int     @id @default(autoincrement())
+  name        String  @db.VarChar(255)
+  size        String  @db.VarChar(255)
+  description String  @db.VarChar(255)
+  sales       sales[]
+  stock       stock[]
+}
+
+model property {
+  property                             Int      @id @default(autoincrement())
+  uid                                  String   @unique(map: "uid") @db.VarChar(200)
+  rental_unit                          Int
+  landlord                             Int      @unique(map: "landlord_pk")
+  agent                                Int?     @unique(map: "agent_pk")
+  caretaker                            Int?     @unique(map: "caretaker")
+  name                                 String?  @unique(map: "property_name") @db.VarChar(100)
+  location                             String?  @db.VarChar(100)
+  landlord_property_landlordTolandlord landlord @relation("property_landlordTolandlord", fields: [landlord], references: [landlord], onDelete: NoAction, onUpdate: NoAction, map: "property_ibfk_1")
+  agent_property_agentToagent          agent?   @relation("property_agentToagent", fields: [agent], references: [agent], onDelete: NoAction, onUpdate: NoAction, map: "property_ibfk_2")
+  room                                 room     @relation(fields: [rental_unit], references: [room], onDelete: NoAction, onUpdate: NoAction, map: "property_ibfk_3")
+
+  @@index([rental_unit], map: "property_ibfk_3")
+}
+
+model rent {
+  rent                                Int       @id @default(autoincrement())
+  invoice                             Int
+  agreement                           Int
+  room_no                             String?   @db.VarChar(255)
+  price                               Float?
+  agreement_start_date                DateTime  @db.Date
+  rental_period                       String    @db.VarChar(30)
+  factor                              Int?
+  amount                              Float?
+  invoice_rent_invoiceToinvoice       invoice   @relation("rent_invoiceToinvoice", fields: [invoice], references: [invoice], onDelete: NoAction, onUpdate: NoAction, map: "rent_ibfk_1")
+  agreement_rent_agreementToagreement agreement @relation("rent_agreementToagreement", fields: [agreement], references: [agreement], onDelete: NoAction, onUpdate: NoAction, map: "rent_ibfk_2")
+
+  @@unique([invoice, agreement], map: "id24")
+  @@index([agreement], map: "agreement")
+}
+
+model repayment {
+  repayment                          Int      @id @default(autoincrement())
+  loan                               Int      @unique(map: "loan")
+  invoice                            Int?     @unique(map: "invoice")
+  date                               DateTime @unique(map: "id_date") @db.Date
+  amount                             Float
+  invoice_repayment_invoiceToinvoice invoice? @relation("repayment_invoiceToinvoice", fields: [invoice], references: [invoice], onDelete: NoAction, onUpdate: NoAction, map: "invoice_fk")
+  loan_repayment_loanToloan          loan     @relation("repayment_loanToloan", fields: [loan], references: [loan], onDelete: NoAction, onUpdate: NoAction, map: "loan_fk")
+}
+
+model room {
+  room                               Int           @id @default(autoincrement())
+  uid                                String        @unique(map: "identification25") @db.VarChar(255)
+  is_psuedo                          Int
+  title                              String?       @db.VarChar(255)
+  floor                              String?       @db.VarChar(255)
+  wing                               String?       @db.VarChar(255)
+  width_ft                           Int?
+  width_inch                         Int?
+  breadth_ft                         Int?
+  breadth_inch                       Int?
+  area_sq_m                          Float?
+  area_sq_ft                         Int?
+  agreement_agreement_roomToroom     agreement[]   @relation("agreement_roomToroom")
+  econnection_econnection_roomToroom econnection[] @relation("econnection_roomToroom")
+  picture_picture_roomToroom         picture[]     @relation("picture_roomToroom")
+  property                           property[]
+  wconnection_wconnection_roomToroom wconnection[] @relation("wconnection_roomToroom")
+}
+
+model sales {
+  id         Int      @id @default(autoincrement())
+  date       DateTime @db.Date
+  qty        Int
+  product_id Int
+  product    product  @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sales_ibfk_1")
+
+  @@index([product_id], map: "product_id")
+}
+
+model service {
+  service                                    Int            @id @default(autoincrement())
+  name                                       String         @unique(map: "id26") @db.VarChar(255)
+  description                                String?        @db.VarChar(255)
+  price                                      Float?
+  auto                                       Int
+  charge_charge_serviceToservice             charge[]       @relation("charge_serviceToservice")
+  subscription_subscription_serviceToservice subscription[] @relation("subscription_serviceToservice")
+}
+
+model stock {
+  id         Int      @id @default(autoincrement())
+  date       DateTime @db.Date
+  value      Int
+  product_id Int
+  product    product  @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "stock_ibfk_1")
+
+  @@index([product_id], map: "product_id")
+}
+
+model subscription {
+  subscription                          Int     @id @default(autoincrement())
+  client                                Int
+  service                               Int
+  amount                                Float?
+  client_subscription_clientToclient    client  @relation("subscription_clientToclient", fields: [client], references: [client], onDelete: NoAction, onUpdate: NoAction, map: "subscription_ibfk_1")
+  service_subscription_serviceToservice service @relation("subscription_serviceToservice", fields: [service], references: [service], onDelete: NoAction, onUpdate: NoAction, map: "subscription_ibfk_2")
+
+  @@unique([client, service], map: "id27")
+  @@index([service], map: "service")
+}
+
+model water {
+  water                                      Int         @id @default(autoincrement())
+  wconnection                                Int
+  invoice                                    Int
+  serial_no                                  String?     @db.VarChar(255)
+  prev_date                                  DateTime?   @db.Date
+  prev_value                                 Float?
+  curr_date                                  DateTime?   @db.Date
+  curr_value                                 Float?
+  consumption                                Float?
+  rate                                       Float?
+  amount                                     Float?
+  wconnection_water_wconnectionTowconnection wconnection @relation("water_wconnectionTowconnection", fields: [wconnection], references: [wconnection], onDelete: NoAction, onUpdate: NoAction, map: "water_ibfk_1")
+  invoice_water_invoiceToinvoice             invoice     @relation("water_invoiceToinvoice", fields: [invoice], references: [invoice], onDelete: NoAction, onUpdate: NoAction, map: "water_ibfk_2")
+
+  @@unique([wconnection, invoice], map: "id28")
+  @@index([invoice], map: "invoice")
+}
+
+model wconnection {
+  wconnection                          Int       @id @default(autoincrement())
+  room                                 Int
+  wmeter                               Int
+  rate                                 Float?
+  start_date                           DateTime? @db.Date
+  end_date                             DateTime  @db.Date
+  start_reading                        Int?
+  end_reading                          Int?
+  disconnected                         DateTime? @db.Date
+  water_water_wconnectionTowconnection water[]   @relation("water_wconnectionTowconnection")
+  room_wconnection_roomToroom          room      @relation("wconnection_roomToroom", fields: [room], references: [room], onDelete: NoAction, onUpdate: NoAction, map: "wconnection_ibfk_1")
+  wmeter_wconnection_wmeterTowmeter    wmeter    @relation("wconnection_wmeterTowmeter", fields: [wmeter], references: [wmeter], onDelete: NoAction, onUpdate: NoAction, map: "wconnection_ibfk_2")
+
+  @@unique([room, wmeter, end_date], map: "id29")
+  @@index([wmeter], map: "wmeter")
+}
+
+model wmeter {
+  wmeter                                 Int           @id @default(autoincrement())
+  serial_no                              String        @unique(map: "id30") @db.VarChar(255)
+  name                                   String?       @db.VarChar(255)
+  comment                                String?       @db.VarChar(255)
+  is_supply                              Int
+  wconnection_wconnection_wmeterTowmeter wconnection[] @relation("wconnection_wmeterTowmeter")
+  wreading_wreading_wmeterTowmeter       wreading[]    @relation("wreading_wmeterTowmeter")
+}
+
+model wreading {
+  wreading                          Int      @id @default(autoincrement())
+  wmeter                            Int
+  invoice                           Int?
+  date                              DateTime @db.Date
+  value                             Float?
+  remark                            String?  @db.VarChar(255)
+  wmeter_wreading_wmeterTowmeter    wmeter   @relation("wreading_wmeterTowmeter", fields: [wmeter], references: [wmeter], onDelete: NoAction, onUpdate: NoAction, map: "wreading_ibfk_1")
+  invoice_wreading_invoiceToinvoice invoice? @relation("wreading_invoiceToinvoice", fields: [invoice], references: [invoice], onDelete: NoAction, onUpdate: NoAction, map: "wreading_ibfk_2")
+
+  @@unique([date, wmeter], map: "identification31")
+  @@index([invoice], map: "invoice")
+  @@index([wmeter], map: "wmeter")
+}
+
+model wreading_changes {
+  wreading_changes Int      @id @default(autoincrement())
+  table_name       String   @db.VarChar(100)
+  operation        String   @db.VarChar(100)
+  pk               Int
+  date             DateTime @db.Date
+}
+
+enum changes_operation {
+  update
+  create
+  delete
+  EMPTY_ENUM_VALUE @map("")
+}
