@@ -9,6 +9,7 @@ import {
 import { PrismaModule } from '@app/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthResolver } from './resolver/auth.resolver';
+import { User } from './resolver/entity/user.entity';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { AuthResolver } from './resolver/auth.resolver';
       driver: ApolloFederationDriver,
       autoSchemaFile: true,
       buildSchemaOptions: {
-        orphanedTypes: [],
+        orphanedTypes: [User],
       },
     }),
     ConfigModule.forRoot({

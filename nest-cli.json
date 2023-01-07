@@ -36,6 +36,42 @@
       "compilerOptions": {
         "tsConfigPath": "libs/common/tsconfig.lib.json"
       }
+    },
+    "invoices": {
+      "type": "application",
+      "root": "apps/invoices",
+      "entryFile": "main",
+      "sourceRoot": "apps/invoices/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/invoices/tsconfig.app.json"
+      }
+    },
+    "users": {
+      "type": "application",
+      "root": "apps/users",
+      "entryFile": "main",
+      "sourceRoot": "apps/users/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/users/tsconfig.app.json"
+      }
+    },
+    "payments": {
+      "type": "application",
+      "root": "apps/payments",
+      "entryFile": "main",
+      "sourceRoot": "apps/payments/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/payments/tsconfig.app.json"
+      }
+    },
+    "houses": {
+      "type": "application",
+      "root": "apps/houses",
+      "entryFile": "main",
+      "sourceRoot": "apps/houses/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/houses/tsconfig.app.json"
+      }
     }
   }
 }

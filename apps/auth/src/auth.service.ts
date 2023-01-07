@@ -55,4 +55,7 @@ export class AuthService {
       access_token: token,
     };
   }
+  getUserById(id: number) {
+    return { id: 1 };
+  }
 }
