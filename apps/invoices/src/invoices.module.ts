@@ -1,3 +1,4 @@
+import { PosterModule } from '@app/common/poster/poster.module';
 import {
   ApolloFederationDriverConfig,
   ApolloFederationDriver,
@@ -23,6 +24,7 @@ import { InvoicesResolver } from './resolver/invoices.resolver';
       isGlobal: true,
     }),
     JwtModule.register({}),
+    PosterModule,
   ],
   controllers: [InvoicesController],
   providers: [InvoicesService, InvoicesResolver],

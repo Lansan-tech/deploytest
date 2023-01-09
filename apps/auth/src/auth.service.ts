@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { PrismaService } from '@app/common';
 import { AuthDto } from './dto';
+import { LoginInput } from './dto/login-input.dto';
 
 @Injectable()
 export class AuthService {
@@ -13,7 +14,7 @@ export class AuthService {
     private config: ConfigService,
   ) {}
 
-  async signUp(dto: AuthDto) {
+  async signUp(dto: LoginInput) {
     try {
       //Check if user already exist TODO: Appended needed data to handle the frontend.
       const found = await this.prismaService.user.findUnique({
