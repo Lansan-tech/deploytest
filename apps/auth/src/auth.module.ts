@@ -10,6 +10,8 @@ import { PrismaModule } from '@app/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthResolver } from './resolver/auth.resolver';
 import { User } from './resolver/entity/user.entity';
+import { UserModule } from './user/user.module';
+import { UserResolver } from './user/user.resolver';
 
 @Module({
   imports: [
@@ -25,8 +27,9 @@ import { User } from './resolver/entity/user.entity';
     }),
     JwtModule.register({}),
     PrismaModule,
+    UserModule,
   ],
-  providers: [AuthService, JwtService, AuthResolver],
+  providers: [AuthService, JwtService, AuthResolver, UserResolver],
   controllers: [],
 })
 export class AuthModule {}

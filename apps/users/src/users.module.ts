@@ -11,6 +11,7 @@ import { UsersService } from './users.service';
 import { TenantModule } from './tenant/tenant.module';
 import { LandlordModule } from './landlord/landlord.module';
 import { CaretakerModule } from './caretaker/caretaker.module';
+import { UsersResolver } from './resolver/users.resolver';
 
 @Module({
   imports: [
@@ -30,6 +31,6 @@ import { CaretakerModule } from './caretaker/caretaker.module';
     CaretakerModule,
   ],
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [UsersService, UsersResolver],
 })
 export class UsersModule {}

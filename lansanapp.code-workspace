@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../../lansanapp"
+		},
+		{
+			"path": "../../../nestjs"
+		},
+		{
+			"path": ".."
+		}
+	],
+	"settings": {}
+}

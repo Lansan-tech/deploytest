@@ -1,23 +1,32 @@
 import { InvoicesService } from '../invoices.service';
 import { Args, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
-import { Invoice } from './entity/invoice.entity';
-import { User } from './entity/user.entity';
+import { Invoices } from './entity/invoice.entity';
+import { PosterService } from '@app/common/poster/poster.service';
 
-@Resolver(() => Invoice)
+@Resolver(() => [Invoices])
 export class InvoicesResolver {
-  constructor(private invoiceService: InvoicesService) {}
+  constructor(
+    private invoiceService: InvoicesService,
+    private posterService: PosterService,
+  ) {}
 
-  @Query(() => [Invoice])
-  getAllInvoices(): Invoice[] {
-    return [{ authorId: 1, title: '', uuid: '', user: { id: 1, posts: [] } }];
+  @Query(() => [Invoices])
+  async allInvoices(): Promise<Invoices[]> {
+    this.posterService.init({
+      month: 10,
+      year: 2022,
+    });
+    return this.posterService.compileToArray();
   }
-  @Query(() => Invoice)
-  findInvoice(@Args('id') id: number): Invoice {
-    return { authorId: 1, title: '', uuid: '', user: { id: 1, posts: [] } };
-  }
+  // @Query(() => Invoices)
+  // findInvoice(@Args('id') id: number): Invoices {
+  //   return {
+  //     invoice :[{client: '', full_name}]
+  //   };
+  // }
 
-  @ResolveField(() => User)
-  user(@Parent() post: Invoice) {
-    return { __typename: 'User', id: post.authorId };
-  }
+  // @ResolveField(() => User)
+  // user(@Parent() post: Invoices) {
+  //   return { __typename: 'User', id: post.user.id };
+  // }
 }

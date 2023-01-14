@@ -18,7 +18,7 @@ export class Item_credit extends Item_unary {
   //Over Ride the detailed poster sl to obtain the credit version
   async detailed_poster(
     parameterized?: boolean,
-    postage?: boolean
+    postage?: boolean,
   ): Promise<string> {
     return await this.invoice.check(`
             Select 
@@ -52,7 +52,7 @@ export class Item_debit extends Item_unary {
   //Over ride the detail_poster to retun a unique sql for the item
   async detailed_poster(
     parameterized?: boolean,
-    postage?: boolean
+    postage?: boolean,
   ): Promise<string> {
     return await this.invoice.check(`
             Select 

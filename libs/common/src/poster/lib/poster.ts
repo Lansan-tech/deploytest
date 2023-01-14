@@ -38,6 +38,23 @@ export class Poster extends Invoice implements PosterInterface {
     //Set the wheere if any sit given
     this.where = options.where;
   }
+
+  async compileToArray() {
+    const result = [];
+    // console.log(this.posterService);
+    const invoice = await this.report();
+    for (let i = 0; i < invoice.length; i++) {
+      const record = invoice[i];
+      result.push(Object.fromEntries(record));
+    }
+    const x = JSON.parse(
+      JSON.stringify(
+        result,
+        (key, value) => (typeof value === 'bigint' ? value.toString() : value), // return everything else unchanged
+      ),
+    );
+    return x;
+  }
   init(options: Options) {
     this.month = options.month;
     this.year = options.year;

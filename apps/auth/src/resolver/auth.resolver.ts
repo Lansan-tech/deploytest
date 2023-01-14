@@ -15,7 +15,7 @@ export class AuthResolver {
 
   @Query(() => User)
   getUser() {
-    return { id: 1 };
+    return { id: 1, posts: [] };
   }
   @Mutation(() => AccessToken)
   login(@Args('loginInput') loginInput: LoginInput) {

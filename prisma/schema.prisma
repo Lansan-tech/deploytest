@@ -7,19 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum USERTYPE {
-  LANDLORD
-  CLIENT 
-  CARETAKER
-}
-model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-
-  user_type USERTYPE @default(CLIENT)
-}
-
 model accounts {
   accounts                             Int      @id @default(autoincrement())
   landlord                             Int      @unique(map: "landlord")
@@ -413,15 +400,6 @@ model picture {
   @@unique([room, name], map: "identification23")
 }
 
-model product {
-  id          Int     @id @default(autoincrement())
-  name        String  @db.VarChar(255)
-  size        String  @db.VarChar(255)
-  description String  @db.VarChar(255)
-  sales       sales[]
-  stock       stock[]
-}
-
 model property {
   property                             Int      @id @default(autoincrement())
   uid                                  String   @unique(map: "uid") @db.VarChar(200)
@@ -485,16 +463,6 @@ model room {
   wconnection_wconnection_roomToroom wconnection[] @relation("wconnection_roomToroom")
 }
 
-model sales {
-  id         Int      @id @default(autoincrement())
-  date       DateTime @db.Date
-  qty        Int
-  product_id Int
-  product    product  @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sales_ibfk_1")
-
-  @@index([product_id], map: "product_id")
-}
-
 model service {
   service                                    Int            @id @default(autoincrement())
   name                                       String         @unique(map: "id26") @db.VarChar(255)
@@ -503,16 +471,6 @@ model service {
   auto                                       Int
   charge_charge_serviceToservice             charge[]       @relation("charge_serviceToservice")
   subscription_subscription_serviceToservice subscription[] @relation("subscription_serviceToservice")
-}
-
-model stock {
-  id         Int      @id @default(autoincrement())
-  date       DateTime @db.Date
-  value      Int
-  product_id Int
-  product    product  @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "stock_ibfk_1")
-
-  @@index([product_id], map: "product_id")
 }
 
 model subscription {
@@ -595,6 +553,13 @@ model wreading_changes {
   operation        String   @db.VarChar(100)
   pk               Int
   date             DateTime @db.Date
+}
+
+model user {
+  id        Int     @id @default(autoincrement())
+  name      String  @db.VarChar(45)
+  email     String  @unique(map: "email_UNIQUE") @db.VarChar(45)
+  user_type String? @default("CLIENT") @db.VarChar(45)
 }
 
 enum changes_operation {
