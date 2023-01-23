@@ -3,90 +3,91 @@ networks:
   rentalsbackend:
 
 services:
-  # auth:
-  #   build:
-  #     context: .
-  #     dockerfile: ./apps/auth/Dockerfile
-  #     target: development
-  #   command: npm run start:dev auth
-  #   env_file:
-  #     - ./apps/auth/.env
-  #   depends_on:
-  #     - postgres-db
-  #   volumes:
-  #     - .:/usr/src/app
-  #     - /usr/src/app/node_modules
-  #   ports:
-  #     - '8080:8080'
-  #   networks:
-  #     - rentalsbackend
-  # invoices:
-  #   build:
-  #     context: .
-  #     dockerfile: ./apps/invoices/Dockerfile
-  #     target: development
-  #   command: npm run start:dev invoices
-  #   env_file:
-  #     - ./apps/invoices/.env
-  #   # depends_on:
-  #   #   # - rabbitmq
-  #   volumes:
-  #     - .:/usr/src/app
-  #     - /usr/src/app/node_modules
-  #   ports:
-  #     - '7070:7070'
-  # users:
-  #   build:
-  #     context: .
-  #     dockerfile: ./apps/users/Dockerfile
-  #     target: development
-  #   command: npm run start:dev invoices
-  #   env_file:
-  #     - ./apps/users/.env
-  #   depends_on:
-  #     - rabbitmq
-  #     - auth
-  #   volumes:
-  #     - .:/usr/src/app
-  #     - /usr/src/app/node_modules
-  #   ports:
-  #     - '5550:5550'
-  # houses:
-  #   build:
-  #     context: .
-  #     dockerfile: ./apps/houses/Dockerfile
-  #     target: development
-  #   command: npm run start:dev houses
-  #   env_file:
-  #     - ./apps/houses/.env
-  #   depends_on:
-  #     - auth
-  #     - rabbitmq
-  #   volumes:
-  #     - .:/usr/src/app
-  #     - /usr/src/app/node_modules
-  #   ports:
-  #     - '9090:9090'
-  # payments:
-  #   build:
-  #     context: .
-  #     dockerfile: ./apps/payments/Dockerfile
-  #     target: development
-  #   command: npm run start:dev payments
-  #   env_file:
-  #     - ./apps/payments/.env
-  #   depends_on:
-  #     - auth
-  #     - rabbitmq
-  #   volumes:
-  #     - .:/usr/src/app
-  #     - /usr/src/app/node_modules
-  #   ports:
-  #     - '5050:5050'
-  # rabbitmq:
-  #   image: rabbitmq
-  #   ports:
-  #     - '5672:5672'
+  auth:
+    build:
+      context: .
+      dockerfile: ./apps/auth/Dockerfile
+      target: development
+    command: npm run start:dev auth
+    env_file:
+      - ./apps/auth/.env
+    depends_on:
+      - postgres-db
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '8080:8080'
+    networks:
+      - rentalsbackend
+  invoices:
+    build:
+      context: .
+      dockerfile: ./apps/invoices/Dockerfile
+      target: development
+    command: npm run start:dev invoices
+    env_file:
+      - ./apps/invoices/.env
+    depends_on:
+      - rabbitmq
+      - auth
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '7070:7070'
+  users:
+    build:
+      context: .
+      dockerfile: ./apps/users/Dockerfile
+      target: development
+    command: npm run start:dev invoices
+    env_file:
+      - ./apps/users/.env
+    depends_on:
+      - rabbitmq
+      - auth
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '5550:5550'
+  houses:
+    build:
+      context: .
+      dockerfile: ./apps/houses/Dockerfile
+      target: development
+    command: npm run start:dev houses
+    env_file:
+      - ./apps/houses/.env
+    depends_on:
+      - auth
+      - rabbitmq
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '9090:9090'
+  payments:
+    build:
+      context: .
+      dockerfile: ./apps/payments/Dockerfile
+      target: development
+    command: npm run start:dev payments
+    env_file:
+      - ./apps/payments/.env
+    depends_on:
+      - auth
+      - rabbitmq
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '5050:5050'
+  rabbitmq:
+    image: rabbitmq
+    ports:
+      - '5672:5672'
   postgres-db:
     image: postgres:13
     ports:

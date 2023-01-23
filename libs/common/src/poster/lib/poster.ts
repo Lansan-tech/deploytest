@@ -88,12 +88,12 @@ export class Poster extends Invoice implements PosterInterface {
     const cb = this.items.get('closing_balance');
     if (cb) cb.post();
     // //Post the rest of the invoice items.
-    this.items.forEach(async (item, key) => {
-      if (key != 'closing_balance') {
-        //Post the rest
-        await item.post();
-      }
-    });
+    // this.items.forEach(async (item, key) => {
+    //   if (key != 'closing_balance') {
+    //     //Post the rest
+    //     await item.post();
+    //   }
+    // });
     //Respond back with a sucess message.
     return 'OK, succefully Posted for the month, Check Invoices';
   }

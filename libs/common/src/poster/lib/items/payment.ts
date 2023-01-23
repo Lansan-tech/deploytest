@@ -11,7 +11,7 @@ export class payament extends Item_unary {
   //Returns the sql for the poster
   async detailed_poster(
     parameterized?: boolean,
-    postage?: boolean
+    postage?: boolean,
   ): Promise<string> {
     const sql = `
             Select

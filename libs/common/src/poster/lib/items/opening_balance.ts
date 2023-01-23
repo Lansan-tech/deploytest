@@ -39,7 +39,7 @@ export class Item_openeing_balance extends Item {
   //
   async detailed_poster(
     parameterized: boolean,
-    postage: boolean
+    postage: boolean,
   ): Promise<string> {
     //define and report the descrepancy
     const discrepancy = `
@@ -63,12 +63,12 @@ export class Item_openeing_balance extends Item {
                 client
                 left join (${await this.initial.detailed_poster(
                   parameterized,
-                  postage
+                  postage,
                 )}) 
                 as initial on initial.client=client.client
                 left  join (${await this.auto.detailed_poster(
                   parameterized,
-                  postage
+                  postage,
                 )})
                 as auto on auto.client=client.client
             Where
@@ -92,7 +92,7 @@ export class Item_openeing_balance extends Item {
             From
                 (${await this.initial.detailed_poster(
                   parameterized,
-                  postage
+                  postage,
                 )}) as initial
             Union All
             Select 
@@ -100,7 +100,7 @@ export class Item_openeing_balance extends Item {
             From 
                 (${await this.auto.detailed_poster(
                   parameterized,
-                  postage
+                  postage,
                 )}) as auto
         
         `;
@@ -121,7 +121,7 @@ class Item_initial_balance extends Item_unary {
   //retusn thr sql for the initla balance posting
   async detailed_poster(
     parameterized: boolean,
-    postage: boolean
+    postage: boolean,
   ): Promise<string> {
     const sql = `
             Select 
@@ -167,7 +167,7 @@ class Item_initial_balance extends Item_unary {
                     on earlier.client = ref.client
                 inner join (${await this.detailed_poster(
                   false,
-                  false
+                  false,
                 )}) as poster
                     on poster.balance_initial = ref.balance_initial
             Set
@@ -230,7 +230,7 @@ class Item_auto_balance extends Item_unary {
   //rertusn the sql used to post this item,i.e, data that will be posted
   async detailed_poster(
     parameterized?: boolean,
-    postage?: boolean
+    postage?: boolean,
   ): Promise<string> {
     const sql = ` 
             Select

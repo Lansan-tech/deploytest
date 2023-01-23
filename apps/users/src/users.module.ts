@@ -6,12 +6,12 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { JwtModule } from '@nestjs/jwt';
-import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { TenantModule } from './tenant/tenant.module';
 import { LandlordModule } from './landlord/landlord.module';
 import { CaretakerModule } from './caretaker/caretaker.module';
 import { UsersResolver } from './resolver/users.resolver';
+import { PrismaModule } from '@app/common';
 
 @Module({
   imports: [
@@ -29,8 +29,9 @@ import { UsersResolver } from './resolver/users.resolver';
     TenantModule,
     LandlordModule,
     CaretakerModule,
+    PrismaModule,
   ],
-  controllers: [UsersController],
+  controllers: [],
   providers: [UsersService, UsersResolver],
 })
 export class UsersModule {}

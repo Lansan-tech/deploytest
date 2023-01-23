@@ -25,21 +25,21 @@ export class Report extends Poster {
   async report(): Promise<Array<Map<string, any>>> {
     console.log('hey yoh');
     //Start with a empty records array
-    const records = Array();
+    const records = [];
     //Get the driver sql
     const driver_sql = await this.get_driver_sql();
     //Query the dbase for the records.
     const results: invoice[] = await this.dbase.$queryRaw(
-      Prisma.sql([driver_sql])
+      Prisma.sql([driver_sql]),
     );
     //step througn the results and for each client create a record with there items
-    for (let invoice of results) {
+    for (const invoice of results) {
       //set the paraenter for the
       this.parameter = parseInt(invoice.primarykey);
       //Create a new js Object
       const record: Map<string, any> = new Map();
       //Let i be the ith item
-      for (let i of this.items) {
+      for (const i of this.items) {
         //Destructu the name of the item and ites values
         const [string, item] = i;
         //get the detailed sql for the item

@@ -48,7 +48,7 @@ export class Item_electricity extends Item_binary {
 
   async detailed_poster(
     parameterized?: boolean,
-    postage?: boolean
+    postage?: boolean,
   ): Promise<string> {
     //Compute the amount to be shown on the clients invoice,
     const charge = `if(membership.count > 1, ebill.current_amount*(power.share/membership.total_share),null)`;
@@ -124,7 +124,7 @@ export class Item_electricity extends Item_binary {
                         ebill
                     inner join (${await this.detailed_poster(
                       false,
-                      false
+                      false,
                     )}) as poster on 
                         ebill.ebill= poster.ebill
                     inner join (${await this.current_invoice()}) as invoice on 

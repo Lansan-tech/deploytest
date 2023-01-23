@@ -20,6 +20,7 @@ export class Item_closing_balance extends Item_binary {
   async post(): Promise<boolean> {
     //Get the current period
     const date = this.cutoffToString();
+    console.log(date);
     //1.
     const period = await this.invoice.run(`
             insert into 
@@ -48,7 +49,7 @@ export class Item_closing_balance extends Item_binary {
             `);
     //3.
     const closingsql = `
-                insert into 
+                insert into
                     closing_balance(amount, invoice, posted)
                     (
                         select
@@ -56,7 +57,7 @@ export class Item_closing_balance extends Item_binary {
                         from
                             (${await this.detailed_poster(
                               false,
-                              false
+                              false,
                             )}) as poster
                             inner join (${await this.current_invoice()}) as invoice
                                 on invoice.client = poster.client
@@ -118,7 +119,7 @@ export class Item_closing_balance extends Item_binary {
     //Start with a empty union oparetor
     let union = ``;
     //Step throuth thee items and for each item compile and sql
-    for (let i of this.invoice.items) {
+    for (const i of this.invoice.items) {
       //Destructure to obtein the current item
       const [string, item] = i;
       //Check if items if of type aesthetic
@@ -132,7 +133,7 @@ export class Item_closing_balance extends Item_binary {
                         poster.client 
                 from (${await item?.detailed_poster(
                   parameterized,
-                  false
+                  false,
                 )}) as poster `;
 
         union = ` union all `;

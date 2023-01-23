@@ -79,3 +79,9 @@ export class ClosingBalance {
   @Field()
   client: number;
 }
+
+@ObjectType()
+export class Poster {
+  @Field()
+  posted: string;
+}
