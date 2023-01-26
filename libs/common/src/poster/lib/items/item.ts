@@ -15,7 +15,7 @@ export interface item {
   unpost: () => Promise<boolean>;
   detailed_poster: (
     parameterized: boolean,
-    postage: boolean
+    postage: boolean,
   ) => Promise<string>;
   detailed_report: () => Promise<string>;
   operational_cutoff: (n: number) => string;
@@ -65,7 +65,7 @@ export abstract class Item implements item {
   //Returns the sql sed to collect data for storage.
   abstract detailed_poster(
     parameterized: boolean,
-    postage: boolean
+    postage: boolean,
   ): Promise<string>;
   //Impliment the get report sql, this sql report for the sore tables, no clalculations is needed.
   async detailed_report(parametarized = true): Promise<string> {

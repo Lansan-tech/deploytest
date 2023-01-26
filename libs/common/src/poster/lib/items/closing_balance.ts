@@ -25,7 +25,7 @@ export class Item_closing_balance extends Item_binary {
     const period = await this.invoice.run(`
             insert into 
                 period(year, month, cutoff)
-                value(year(${date}), month(${date}), ${date})
+                value(year('${date}'), month('${date}'), '${date}')
             on duplicate key update
                 year=values(year),
                 month=values(month),
@@ -42,7 +42,7 @@ export class Item_closing_balance extends Item_binary {
                             0 as is_valid
                         From
                             (${await this.poster()}) as poster
-                            join (${await this.current_period()}) as period 
+                            join (${await this.current_period()}) as period
                     )
                     on duplicate key update
                             period=values(period)
@@ -65,11 +65,11 @@ export class Item_closing_balance extends Item_binary {
                 on duplicate key update
                     amount = values(amount)
         `;
-    //Create a prims sql
+    // //Create a prims sql
     const closing = await this.invoice.run(closingsql);
-    //Check for the stsus of the created closing balance
+    // //Check for the stsus of the created closing balance
     if (closing && invoice && period) return true;
-    //Always return a false posting never happened
+    // //Always return a false posting never happened
     return false;
   }
 
@@ -139,26 +139,6 @@ export class Item_closing_balance extends Item_binary {
         union = ` union all `;
       }
     }
-    // //Compile a static version of the ites for union puposes.
-    // const items = ['payment', 'water', 'opening_balance', 'credits', 'debits', 'rent'];
-
-    // //Step through the items used for computation and
-    // for (let i = 0; i < items.length; i++) {
-    //     //
-    //     let item = this.invoice.items.get(items[i])
-    //     //Check if item is valid
-    //     if(item){
-    //         sql = sql + union + `
-    //             Select
-    //                 poster.amount,
-    //                 poster.client
-    //         from (${await item?.detailed_poster(false, false)}) as poster `
-
-    //         union = ` union all `
-    //     }
-
-    // }
-
     return sql;
   }
   //

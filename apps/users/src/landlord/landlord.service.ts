@@ -34,9 +34,11 @@ export class LandlordService {
           },
         },
       },
+      include: {
+        accounts_accounts_landlordTolandlord: true,
+        property_property_landlordTolandlord: true,
+      },
     });
-    console.log(landlord);
-
     return newLandlord;
   }
 

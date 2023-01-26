@@ -14,7 +14,7 @@ export class Item_Rent extends Item_binary {
   //Complie and retuen a detailed sql for posting the item
   async detailed_poster(
     parameterized?: boolean,
-    postage?: boolean
+    postage?: boolean,
   ): Promise<string> {
     //
     //Compute the rent conversion factor, e.g., 1 for monthly paying clients,
@@ -24,7 +24,7 @@ export class Item_Rent extends Item_binary {
     //monthly rent on the fall of each quarter and null otherwise.
     //
     //The fall of a quarter occurs when...
-    const fall = `((month(agreement.start_date)- ${this.invoice.month})% 3) = 0`;
+    const fall = `((month(agreement.start_date) - ${this.invoice.month})% 3) = 0`;
     //if quality
     const quarterly = `if(${fall}, 3, null)`;
     //compile the factor of multiplication
@@ -34,7 +34,7 @@ export class Item_Rent extends Item_binary {
     //Local function to return the month name for the firts of the current period
     const month = (n: number, firstday: string) => {
       //Create a new date
-      let date = new Date(firstday);
+      const date = new Date(firstday);
       //Add the n number of months to the current date
       const date_ = date.addMonths(n);
       return date_.toLocaleString('en-us', { month: 'long' });
@@ -42,13 +42,13 @@ export class Item_Rent extends Item_binary {
     //join the next 3 months
     const month3 = `${month(0, firstday)}, ${month(1, firstday)}, ${month(
       2,
-      firstday
+      firstday,
     )}`;
     //For the quartterly clientsif the quakter is due return the next three month
     //otherwise retun the current on
     const period = `if(client.quarterly and (${fall}), '${month3}', '${month(
       0,
-      firstday
+      firstday,
     )}')`;
     //Return a checked sql
     return await this.invoice.check(`

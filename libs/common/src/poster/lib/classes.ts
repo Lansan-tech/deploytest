@@ -201,13 +201,13 @@ export abstract class Invoice implements InvoiceIntereface {
     //Add the water item
     this.items.set('water', new Item_water(this));
     this.items.set('power', new Item_electricity(this));
-    //Add the payment for the client
+    // //Add the payment for the client
     this.items.set('payment', new payament(this));
     this.items.set('services', new Item_Service(this));
-    //adjust ments
+    // //adjust ments
     this.items.set('credits', new Item_credit(this));
     this.items.set('debits', new Item_debit(this));
-    //asdd th  cloeing balance
+    // //asdd th  cloeing balance
     this.items.set('closing_balance', new Item_closing_balance(this));
   }
 
@@ -226,8 +226,11 @@ export abstract class Invoice implements InvoiceIntereface {
   async run(sql: string): Promise<boolean> {
     //Create a new prisma
     const sqlToRun = Prisma.sql([sql]);
+    console.log(sqlToRun);
+    const a = await this.dbase.$executeRaw(sqlToRun);
+    console.log(a);
     //execute the sql
-    if (await this.dbase.$executeRaw(sqlToRun)) return true;
+    if (a) return true;
     return false;
   }
 }

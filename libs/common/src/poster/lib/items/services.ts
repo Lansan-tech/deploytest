@@ -77,7 +77,7 @@ export class Item_Service extends Item_binary {
     //when no of the condition suplly th servie charge
     const price = `if(${ca}, ${a}, if(${cb}, ${b}, null))`;
     //The fall of a qualter occure when
-    const fall = `((month(agreement.start_date) - ${this.invoice.month}) %3) = 0`;
+    const fall = `((month(agreement.start_date) - ${this.invoice.month}) % 3) = 0`;
     //
     const quarterly = `if(${fall}, 3, null)`;
     //Compile he facyro of multilication
@@ -111,7 +111,7 @@ export class Item_Service extends Item_binary {
                 }
                 and ${postage ? `charge.charge is null` : `true`}
                 and ${amount} is not null
-                and agreement.start_date >= ${this.invoice.cutoffToString()}
+                and agreement.start_date >= '${this.invoice.cutoffToString()}'
         `);
   }
 
@@ -140,14 +140,14 @@ export class Item_Service extends Item_binary {
                 (
                     Select
                         poster.name,
-                        poster.price,poster.factor,poster.amount, invoice.invoice
+                        poster.price,poster.factor,poster.amount, invoice.invoice, poster.service 
                     From
-                        (${await this.poster()}) as charge 
+                        (${await this.poster()}) as poster 
                         inner join (${await this.current_invoice()}) as invoice
                         on invoice.client= poster.client
                 )    
             On duplicate key update
-                    name=values(name)
+                    name=values(name),
                     amount=values(amount)
         `);
   }
