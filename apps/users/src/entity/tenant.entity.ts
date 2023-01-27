@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { credit } from '@prisma/client';
 
 @ObjectType()
 export class Tenant {
@@ -14,4 +15,12 @@ export class Tenant {
   email: string;
   @Field()
   quarterly: number;
+}
+
+@ObjectType()
+export class ReconResponse {
+  @Field()
+  success: boolean;
+  @Field()
+  msg: string;
 }

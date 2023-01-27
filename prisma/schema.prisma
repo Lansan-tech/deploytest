@@ -412,10 +412,9 @@ model property {
   landlord_property_landlordTolandlord landlord @relation("property_landlordTolandlord", fields: [landlord], references: [landlord], onDelete: NoAction, onUpdate: NoAction, map: "property_ibfk_1")
   agent_property_agentToagent          agent?   @relation("property_agentToagent", fields: [agent], references: [agent], onDelete: NoAction, onUpdate: NoAction, map: "property_ibfk_2")
   room                                 room     @relation(fields: [rental_unit], references: [room], onDelete: NoAction, onUpdate: NoAction, map: "property_ibfk_3")
-
+  services        service[]
   @@index([rental_unit], map: "property_ibfk_3")
 }
-
 model rent {
   rent                                Int       @id @default(autoincrement())
   invoice                             Int
@@ -446,16 +445,8 @@ model repayment {
 model room {
   room                               Int           @id @default(autoincrement())
   uid                                String        @unique(map: "identification25") @db.VarChar(255)
-  is_psuedo                          Int
+  is_psuedo                          Int           @default(0)
   title                              String?       @db.VarChar(255)
-  floor                              String?       @db.VarChar(255)
-  wing                               String?       @db.VarChar(255)
-  width_ft                           Int?
-  width_inch                         Int?
-  breadth_ft                         Int?
-  breadth_inch                       Int?
-  area_sq_m                          Float?
-  area_sq_ft                         Int?
   agreement_agreement_roomToroom     agreement[]   @relation("agreement_roomToroom")
   econnection_econnection_roomToroom econnection[] @relation("econnection_roomToroom")
   picture_picture_roomToroom         picture[]     @relation("picture_roomToroom")
@@ -471,6 +462,8 @@ model service {
   auto                                       Int
   charge_charge_serviceToservice             charge[]       @relation("charge_serviceToservice")
   subscription_subscription_serviceToservice subscription[] @relation("subscription_serviceToservice")
+  property_id       Int
+  property         property @relation(fields: [property_id], references: [property])
 }
 
 model subscription {
