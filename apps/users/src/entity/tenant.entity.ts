@@ -1,5 +1,4 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { credit } from '@prisma/client';
 
 @ObjectType()
 export class Tenant {

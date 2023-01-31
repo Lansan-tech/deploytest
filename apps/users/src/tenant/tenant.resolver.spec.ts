@@ -1,12 +1,14 @@
+import { PrismaService } from '@app/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TenantResolver } from './tenant.resolver';
+import { TenantService } from './tenant.service';
 
 describe('TenantResolver', () => {
   let resolver: TenantResolver;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [TenantResolver],
+      providers: [TenantResolver, TenantService, PrismaService],
     }).compile();
 
     resolver = module.get<TenantResolver>(TenantResolver);

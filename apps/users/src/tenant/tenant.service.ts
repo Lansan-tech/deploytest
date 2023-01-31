@@ -82,7 +82,7 @@ export class TenantService {
               },
             },
           });
-          return credit;
+          return { success: true, msg: 'Credit creat for account recon' };
         } catch (e) {
           return e.message;
         }
@@ -101,6 +101,7 @@ export class TenantService {
               },
             },
           });
+          return { success: true, msg: 'Debit creat for account recon' };
         } catch (e) {
           return e.message;
         }

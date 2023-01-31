@@ -1,4 +1,6 @@
+import { PrismaService } from '@app/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { PaymentsService } from '../payments.service';
 import { PaymentsResolver } from './payments.resolver';
 
 describe('PaymentsResolver', () => {
@@ -6,7 +8,7 @@ describe('PaymentsResolver', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [PaymentsResolver],
+      providers: [PaymentsResolver, PaymentsService, PrismaService],
     }).compile();
 
     resolver = module.get<PaymentsResolver>(PaymentsResolver);
