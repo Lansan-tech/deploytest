@@ -1,0 +1,47 @@
+name: Build and Deploy
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the main branch
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    container: node:14
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - dockerfile: ./apps/auth/Dockerfile
+            image: ghcr.io/username/authservice
+          - dockerfile: ./apps/gateway/Dockerfile
+            image: ghcr.io/username/gatewayservice
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      - name: Build and Publish to Github Packages Registry
+        uses: elgohr/Publish-Docker-Github-Action@master
+        env:
+          NEXT_PUBLIC_BACKEND_URL: ${{ secrets.APP_NEXT_PUBLIC_BACKEND_URL }}
+
+        with:
+          name: lanteiRaph/lansan/lansanapp
+          registry: ghcr.io
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          dockerfile: ${{ matrix.dockerfile }}
+          buildargs: NEXT_PUBLIC_BACKEND_URL
+          tags: latest
