@@ -24,9 +24,11 @@ jobs:
       matrix:
         include:
           - dockerfile: ./apps/auth/Dockerfile
-            image: ghcr.io/username/authservice
-          - dockerfile: ./apps/gateway/Dockerfile
-            image: ghcr.io/username/gatewayservice
+            image: ghcr.io/lansan-tech/authservice
+            name: auth
+          - dockerfile: ./apps/lansan-tech/Dockerfile
+            image: ghcr.io/lansan-tech/gatewayservice
+            name: gateway
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -38,7 +40,7 @@ jobs:
           NEXT_PUBLIC_BACKEND_URL: ${{ secrets.APP_NEXT_PUBLIC_BACKEND_URL }}
 
         with:
-          name: lanteiRaph/lansan/lansanapp
+          name: lansantc/${{ matrix.name }}/service
           registry: ghcr.io
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.GITHUB_TOKEN }}
