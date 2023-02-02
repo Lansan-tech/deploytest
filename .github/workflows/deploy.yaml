@@ -26,9 +26,12 @@ jobs:
           - dockerfile: ./apps/auth/Dockerfile
             image: ghcr.io/lansan-tech/authservice
             name: auth
-          - dockerfile: ./apps/lansan-tech/Dockerfile
+          - dockerfile: ./apps/gateway/Dockerfile
             image: ghcr.io/lansan-tech/gatewayservice
             name: gateway
+    permissions:
+      contents: read
+      packages: write
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
