@@ -40,7 +40,7 @@ jobs:
           NEXT_PUBLIC_BACKEND_URL: ${{ secrets.APP_NEXT_PUBLIC_BACKEND_URL }}
 
         with:
-          name: lansantc/${{ matrix.name }}/service
+          name: lansan-tech/${{ matrix.name }}/service
           registry: ghcr.io
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.GITHUB_TOKEN }}
