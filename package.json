@@ -45,6 +45,7 @@
     "class-validator": "^0.14.0",
     "datejs": "^1.0.0-rc3",
     "graphql": "^16.6.0",
+    "graphql-upload": "^16.0.2",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",

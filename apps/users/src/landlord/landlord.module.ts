@@ -3,7 +3,7 @@ import { LandlordService } from './landlord.service';
 import { LandlordResolver } from './landlord.resolver';
 
 @Module({
-  imports: [LandlordService],
+  imports: [],
   providers: [LandlordService, LandlordResolver],
   controllers: [],
 })

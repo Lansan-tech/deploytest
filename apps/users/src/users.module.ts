@@ -12,6 +12,7 @@ import { LandlordModule } from './landlord/landlord.module';
 import { CaretakerModule } from './caretaker/caretaker.module';
 import { UsersResolver } from './resolver/users.resolver';
 import { PrismaModule } from '@app/common';
+import { RegistrationModule } from '@app/common/registration/registration.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { PrismaModule } from '@app/common';
     TenantModule,
     LandlordModule,
     CaretakerModule,
+    RegistrationModule,
     PrismaModule,
   ],
   controllers: [],

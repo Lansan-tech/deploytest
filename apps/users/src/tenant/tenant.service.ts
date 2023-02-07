@@ -1,4 +1,5 @@
 import { PrismaService } from '@app/common';
+import { RegistrationService } from '@app/common/registration/registration.service';
 import { Injectable } from '@nestjs/common';
 import { TenantDto } from './Dtos/create-tenant.dto';
 import { ReconcileDto } from './Dtos/recon-account.dto';
@@ -6,7 +7,6 @@ import { ReconcileDto } from './Dtos/recon-account.dto';
 @Injectable()
 export class TenantService {
   constructor(private prismaService: PrismaService) {}
-
   async create(tenant: TenantDto) {
     try {
       const newClient = await this.prismaService.client.create({

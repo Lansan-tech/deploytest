@@ -9,4 +9,9 @@ export class PosterService extends Poster {
       dbase: prismaService,
     });
   }
+
+  getInvoiceByClient(clientName: string) {
+    this.where = clientName;
+    return this.compileToArray();
+  }
 }

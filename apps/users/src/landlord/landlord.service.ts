@@ -42,10 +42,11 @@ export class LandlordService {
     return newLandlord;
   }
 
+  //TODO:
   buildProperties(landlord: LandlordDto): any {
     return [];
   }
-
+  //TODO:
   buidAgent(landlord: LandlordDto): any {
     return [];
   }

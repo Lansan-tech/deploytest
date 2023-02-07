@@ -42,6 +42,11 @@ export class InvoicesResolver {
     const posted = await this.posterService.unpost();
     return { posted };
   }
+
+  @Mutation(() => Invoices)
+  getClientInvoice(@Args('clientName') clientName: string) {
+    return this.posterService.getInvoiceByClient(`client.name=${clientName}`);
+  }
   // @Query(() => Invoices)
   // findInvoice(@Args('id') id: number): Invoices {
   //   return {

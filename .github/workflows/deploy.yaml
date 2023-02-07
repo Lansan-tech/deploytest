@@ -41,7 +41,6 @@ jobs:
         uses: elgohr/Publish-Docker-Github-Action@master
         env:
           NEXT_PUBLIC_BACKEND_URL: ${{ secrets.APP_NEXT_PUBLIC_BACKEND_URL }}
-
         with:
           name: lansan-tech/${{ matrix.name }}/service
           registry: ghcr.io

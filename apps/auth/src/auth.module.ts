@@ -12,6 +12,7 @@ import { AuthResolver } from './resolver/auth.resolver';
 import { User } from './resolver/entity/user.entity';
 import { UserModule } from './user/user.module';
 import { UserResolver } from './user/user.resolver';
+import { JwtStrategy } from './strategy/jwt.strategy';
 
 @Module({
   imports: [
@@ -29,7 +30,7 @@ import { UserResolver } from './user/user.resolver';
     PrismaModule,
     UserModule,
   ],
-  providers: [AuthService, JwtService, AuthResolver, UserResolver],
+  providers: [AuthService, JwtStrategy, AuthResolver, UserResolver],
   controllers: [],
 })
 export class AuthModule {}
