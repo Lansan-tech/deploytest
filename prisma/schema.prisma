@@ -33,6 +33,8 @@ model agent {
   name                           String    @db.VarChar(100)
   title                          String    @db.VarChar(100)
   property_property_agentToagent property? @relation("property_agentToagent")
+  userId                         Int       @unique
+  user                           user      @relation(fields: [userId], references: [id])
 }
 
 model agreement {
@@ -121,6 +123,8 @@ model client {
   phone                                          String?           @db.VarChar(255)
   address                                        String?           @db.VarChar(255)
   email                                          String?           @db.VarChar(255)
+  userId                                         Int               @unique
+  user                                           user              @relation(fields: [userId], references: [id])
   agreement_agreement_clientToclient             agreement[]       @relation("agreement_clientToclient")
   balance_initial_balance_initial_clientToclient balance_initial[] @relation("balance_initial_clientToclient")
   communications_communications_clientToclient   communications[]  @relation("communications_clientToclient")
@@ -318,7 +322,8 @@ model landlord {
   landlord                             Int       @id @default(autoincrement())
   name                                 String?   @db.VarChar(100)
   title                                Int?
-  username                             String    @unique(map: "username") @db.VarChar(200)
+  userId                               Int       @unique
+  user                                 user      @relation(fields: [userId], references: [id])
   paybill                              Int       @unique(map: "paybill")
   accounts_accounts_landlordTolandlord accounts? @relation("accounts_landlordTolandlord")
   property_property_landlordTolandlord property? @relation("property_landlordTolandlord")
@@ -401,20 +406,22 @@ model picture {
 }
 
 model property {
-  property                             Int      @id @default(autoincrement())
-  uid                                  String   @unique(map: "uid") @db.VarChar(200)
+  property                             Int       @id @default(autoincrement())
+  uid                                  String    @unique(map: "uid") @db.VarChar(200)
   rental_unit                          Int
-  landlord                             Int      @unique(map: "landlord_pk")
-  agent                                Int?     @unique(map: "agent_pk")
-  caretaker                            Int?     @unique(map: "caretaker")
-  name                                 String?  @unique(map: "property_name") @db.VarChar(100)
-  location                             String?  @db.VarChar(100)
-  landlord_property_landlordTolandlord landlord @relation("property_landlordTolandlord", fields: [landlord], references: [landlord], onDelete: NoAction, onUpdate: NoAction, map: "property_ibfk_1")
-  agent_property_agentToagent          agent?   @relation("property_agentToagent", fields: [agent], references: [agent], onDelete: NoAction, onUpdate: NoAction, map: "property_ibfk_2")
-  room                                 room     @relation(fields: [rental_unit], references: [room], onDelete: NoAction, onUpdate: NoAction, map: "property_ibfk_3")
-  services        service[]
+  landlord                             Int       @unique(map: "landlord_pk")
+  agent                                Int?      @unique(map: "agent_pk")
+  caretaker                            Int?      @unique(map: "caretaker")
+  name                                 String?   @unique(map: "property_name") @db.VarChar(100)
+  location                             String?   @db.VarChar(100)
+  landlord_property_landlordTolandlord landlord  @relation("property_landlordTolandlord", fields: [landlord], references: [landlord], onDelete: NoAction, onUpdate: NoAction, map: "property_ibfk_1")
+  agent_property_agentToagent          agent?    @relation("property_agentToagent", fields: [agent], references: [agent], onDelete: NoAction, onUpdate: NoAction, map: "property_ibfk_2")
+  room                                 room      @relation(fields: [rental_unit], references: [room], onDelete: NoAction, onUpdate: NoAction, map: "property_ibfk_3")
+  services                             service[]
+
   @@index([rental_unit], map: "property_ibfk_3")
 }
+
 model rent {
   rent                                Int       @id @default(autoincrement())
   invoice                             Int
@@ -462,8 +469,8 @@ model service {
   auto                                       Int
   charge_charge_serviceToservice             charge[]       @relation("charge_serviceToservice")
   subscription_subscription_serviceToservice subscription[] @relation("subscription_serviceToservice")
-  property_id       Int
-  property         property @relation(fields: [property_id], references: [property])
+  property_id                                Int
+  property                                   property       @relation(fields: [property_id], references: [property])
 }
 
 model subscription {
@@ -552,7 +559,12 @@ model user {
   id        Int     @id @default(autoincrement())
   name      String  @db.VarChar(45)
   email     String  @unique(map: "email_UNIQUE") @db.VarChar(45)
-  user_type String? @default("CLIENT") @db.VarChar(45)
+  imageUrl  String? @db.VarChar(255)
+  user_type String? @default("AGENT") @db.VarChar(45)
+
+  client   client?
+  landlord landlord?
+  agent    agent?
 }
 
 enum changes_operation {
