@@ -12,8 +12,17 @@ export class TenantController {
     private tenantService: TenantService,
     private registrationService: RegistrationService,
   ) {}
-  @Get('flow')
-  registrationFlow(@GetUser() user: AuthDto) {
+  @Get('flow/client')
+  clientFlow(@GetUser() user: AuthDto) {
+    return this.registrationService.tenantRegistrationFlow(user);
+  }
+  @Get('flow/landlord')
+  landlordFlow(@GetUser() user: AuthDto) {
+    return this.registrationService.tenantRegistrationFlow(user);
+  }
+
+  @Get('flow/property')
+  propertyFlow(@GetUser() user: AuthDto) {
     return this.registrationService.tenantRegistrationFlow(user);
   }
 }

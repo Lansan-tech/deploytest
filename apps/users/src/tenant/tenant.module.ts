@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TenantService } from './tenant.service';
-import { TenantResolver } from './tenant.resolver';
+import { TenantResolver } from './resolvers/tenant.resolver';
 import { TenantController } from './tenant.controller';
 import { JwtStrategy } from 'apps/auth/src/strategy/jwt.strategy';
 

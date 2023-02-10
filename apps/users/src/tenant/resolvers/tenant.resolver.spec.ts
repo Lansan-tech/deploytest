@@ -1,7 +1,7 @@
 import { PrismaService } from '@app/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TenantResolver } from './tenant.resolver';
-import { TenantService } from './tenant.service';
+import { TenantService } from '../tenant.service';
 
 describe('TenantResolver', () => {
   let resolver: TenantResolver;

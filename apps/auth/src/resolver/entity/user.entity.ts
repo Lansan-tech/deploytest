@@ -5,6 +5,11 @@ import { Directive, ObjectType, Field, ID, InputType } from '@nestjs/graphql';
 export class User {
   @Field(() => ID)
   id: number;
+
+  @Field()
+  name: string;
+  @Field()
+  imageUrl: string;
 }
 
 @ObjectType()

@@ -1,7 +1,7 @@
 import { Resolver, Query, Args } from '@nestjs/graphql';
-import { LandlordDto } from './Dtos/landlord-input.dto';
+import { LandlordDto } from '../Dtos/landlord-input.dto';
 import { Landlord } from '../entity/landlord.entity';
-import { LandlordService } from './landlord.service';
+import { LandlordService } from '../landlord.service';
 
 @Resolver()
 export class LandlordResolver {

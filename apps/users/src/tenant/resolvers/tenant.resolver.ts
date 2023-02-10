@@ -1,8 +1,8 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ReconResponse, Tenant } from '../entity/tenant.entity';
-import { TenantDto } from './Dtos/create-tenant.dto';
-import { ReconcileDto } from './Dtos/recon-account.dto';
-import { TenantService } from './tenant.service';
+import { TenantDto } from '../Dtos/create-tenant.dto';
+import { ReconcileDto } from '../Dtos/recon-account.dto';
+import { TenantService } from '../tenant.service';
 
 @Resolver()
 export class TenantResolver {

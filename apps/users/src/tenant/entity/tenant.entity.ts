@@ -9,7 +9,7 @@ export class Tenant {
   @Field()
   contact: string;
   @Field()
-  phoneNo: string;
+  phone: string;
   @Field()
   email: string;
   @Field()

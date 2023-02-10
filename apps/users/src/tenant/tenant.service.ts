@@ -1,12 +1,21 @@
 import { PrismaService } from '@app/common';
-import { RegistrationService } from '@app/common/registration/registration.service';
 import { Injectable } from '@nestjs/common';
+import { GetUser } from 'apps/auth/src/decorator';
+import { User } from 'apps/auth/src/resolver/entity/user.entity';
 import { TenantDto } from './Dtos/create-tenant.dto';
 import { ReconcileDto } from './Dtos/recon-account.dto';
 
 @Injectable()
 export class TenantService {
   constructor(private prismaService: PrismaService) {}
+  async getClientuser(userId: number) {
+    const client = this.prismaService.client.findUnique({
+      where: {
+        userId: userId
+      },
+    });
+    return client;
+  }
   async create(tenant: TenantDto) {
     try {
       const newClient = await this.prismaService.client.create({

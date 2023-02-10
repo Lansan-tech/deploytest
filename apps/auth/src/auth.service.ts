@@ -22,6 +22,7 @@ export class AuthService {
       });
       //If so return a token if not create and return a token
       if (found) return this.signToken(found.id, found.email);
+      //User not found.
       const user = await this.prismaService.user.create({
         data: {
           email: dto.email,

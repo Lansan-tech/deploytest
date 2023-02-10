@@ -6,6 +6,21 @@ import { LandlordDto } from './Dtos/landlord-input.dto';
 export class LandlordService {
   constructor(private prismaService: PrismaService) {}
 
+  //TODO: change landlord to userId
+  async getLandlordUser(userId: number) {
+    try {
+      const landlord = await this.prismaService.landlord.findUnique({
+        where: {
+          userId: userId,
+        },
+      });
+
+      return landlord;
+    } catch (e: any) {
+      return e.message;
+    }
+  }
+
   async create(landlord: LandlordDto) {
     //Create a new landlord.
     const newLandlord = await this.prismaService.landlord.create({
@@ -13,26 +28,6 @@ export class LandlordService {
         name: landlord.name,
         paybill: landlord.paybill,
         username: landlord.username,
-        property_property_landlordTolandlord: {
-          create: {
-            name: landlord.property.name,
-            location: landlord.property.location,
-            uid: 'sdkfjsfdfsdfgsdf',
-            room: {
-              create: {
-                uid: landlord.property.rentalUnits[0].uuid,
-                is_psuedo: 0,
-              },
-            },
-            agent_property_agentToagent: {
-              create: {
-                name: landlord.agent.name,
-                title: landlord.agent.title,
-                username: landlord.agent.username,
-              },
-            },
-          },
-        },
       },
       include: {
         accounts_accounts_landlordTolandlord: true,
@@ -40,14 +35,5 @@ export class LandlordService {
       },
     });
     return newLandlord;
-  }
-
-  //TODO:
-  buildProperties(landlord: LandlordDto): any {
-    return [];
-  }
-  //TODO:
-  buidAgent(landlord: LandlordDto): any {
-    return [];
   }
 }
