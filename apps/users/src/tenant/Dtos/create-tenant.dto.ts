@@ -32,9 +32,7 @@ export class Agreement {
   @Field()
   comment: string;
   @Field()
-  get terminated(): string {
-    return '';
-  }
+  terminated: string;
   @Field()
   room: Room;
 }
@@ -53,10 +51,10 @@ export class TenantDto {
   email: string;
   @Field()
   quarterly: number;
-  @Field()
+  @Field(() => BalanceInitial)
   balance_initial: BalanceInitial;
   @Field()
   subscription: Subscriptions;
-  @Field()
+  @Field(() => Agreement)
   agreement: Agreement;
 }

@@ -1,15 +1,52 @@
-import { Module } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Module,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ApolloGatewayDriver, ApolloGatewayDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule } from '@nestjs/graphql';
-import { IntrospectAndCompose } from '@apollo/gateway';
+import { IntrospectAndCompose, RemoteGraphQLDataSource } from '@apollo/gateway';
 
+const getToken = (authToken: string): string => {
+  const match = authToken.match(/^Bearer (.*)$/);
+  if (!match || match.length < 2) {
+    throw new HttpException(
+      { message: 'INVALID_BEARER_TOKEN' },
+      HttpStatus.UNAUTHORIZED,
+    );
+  }
+  return authToken;
+};
+const handleAuth = ({ req }) => {
+  try {
+    if (req.headers.authorization) {
+      const token = getToken(req.headers.authorization);
+      return { userToken: token };
+    }
+  } catch (err) {
+    throw new UnauthorizedException(
+      'User unauthorized with invalid authorization Headers',
+    );
+  }
+};
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloGatewayDriverConfig>({
       driver: ApolloGatewayDriver,
-      server: {},
+      server: {
+        context: handleAuth,
+      },
       gateway: {
+        buildService: ({ name, url }) => {
+          return new RemoteGraphQLDataSource({
+            url,
+            willSendRequest: ({ request, context }) => {
+              request.http.headers.set('Authorization', context.userToken);
+            },
+          });
+        },
         supergraphSdl: new IntrospectAndCompose({
           subgraphs: [
             { name: 'auth', url: 'http://localhost:8080/graphql' },

@@ -12,7 +12,7 @@ export class Item_water extends Item_binary {
   //Implimenthhte detail poster for the water,:Reurns an sql that is used to help in posting and retirnv of reporting infomation.
   async detailed_poster(
     parameterized?: boolean,
-    postage?: boolean
+    postage?: boolean,
   ): Promise<string> {
     //The qty of water consumed(the diffence if any)
     const qty = `if(curr.value - prev.value < 0, null , curr.value - prev.value)`;

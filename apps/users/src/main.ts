@@ -4,7 +4,9 @@ import { UsersModule } from './users.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(UsersModule, { cors: true });
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.useGlobalPipes(
+    new ValidationPipe({ transform: true, forbidUnknownValues: false }),
+  );
   await app.listen(5050);
 }
 bootstrap();

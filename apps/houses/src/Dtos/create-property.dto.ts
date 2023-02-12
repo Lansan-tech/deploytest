@@ -2,6 +2,11 @@ import { InputType, Field } from '@nestjs/graphql';
 import { IsString, IsOptional, IsNumber } from 'class-validator';
 
 @InputType()
+export class Services {
+  name: string;
+  description: string;
+}
+@InputType()
 export class RentalUnit {
   @Field()
   @IsString()
@@ -30,8 +35,11 @@ export class Property {
   @Field(() => [RentalUnit])
   rentalUnits: [RentalUnit];
   @Field()
-  @IsString()
-  landlordUsername: string;
+  @IsNumber()
+  landlord: number;
+  @Field()
+  @IsNumber()
+  agent: number;
   @Field()
   @IsString()
   agentUsername: string;

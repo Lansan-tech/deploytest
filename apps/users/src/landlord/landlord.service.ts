@@ -1,7 +1,10 @@
 import { PrismaService } from '@app/common';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, UseGuards } from '@nestjs/common';
+import { JwtGuard } from 'apps/auth/src/guard';
 import { LandlordDto } from './Dtos/landlord-input.dto';
+import { User } from './entity/user.entity';
 
+@UseGuards(JwtGuard)
 @Injectable()
 export class LandlordService {
   constructor(private prismaService: PrismaService) {}
@@ -21,19 +24,23 @@ export class LandlordService {
     }
   }
 
-  async create(landlord: LandlordDto) {
-    //Create a new landlord.
-    const newLandlord = await this.prismaService.landlord.create({
-      data: {
-        name: landlord.name,
-        paybill: landlord.paybill,
-        username: landlord.username,
-      },
-      include: {
-        accounts_accounts_landlordTolandlord: true,
-        property_property_landlordTolandlord: true,
-      },
-    });
-    return newLandlord;
+  async create(user: User, landlord: LandlordDto) {
+    try {
+      //Create a new landlord.
+      const newLandlord = await this.prismaService.landlord.create({
+        data: {
+          name: landlord.name,
+          paybill: landlord.paybill,
+          userId: user.id,
+        },
+        include: {
+          accounts_accounts_landlordTolandlord: true,
+          property_property_landlordTolandlord: true,
+        },
+      });
+      return newLandlord;
+    } catch (e) {
+      throw new BadRequestException(e.message);
+    }
   }
 }

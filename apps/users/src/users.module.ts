@@ -10,9 +10,11 @@ import { UsersService } from './users.service';
 import { TenantModule } from './tenant/tenant.module';
 import { LandlordModule } from './landlord/landlord.module';
 import { CaretakerModule } from './caretaker/caretaker.module';
-import { UsersResolver } from './resolver/users.resolver';
 import { PrismaModule } from '@app/common';
 import { RegistrationModule } from '@app/common/registration/registration.module';
+import { CaslModule } from 'nest-casl';
+import { Roles } from '../../roles/roles';
+import { JwtStrategy } from 'apps/auth/src/strategy/jwt.strategy';
 
 @Module({
   imports: [
@@ -26,6 +28,13 @@ import { RegistrationModule } from '@app/common/registration/registration.module
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    CaslModule.forRoot<Roles>({
+      // Role to grant full access, optional
+      superuserRole: Roles.admin,
+      // Function to get casl user from request
+      // Optional, defaults to `(request) => request.user`
+      getUserFromRequest: (request) => request.user,
+    }),
     JwtModule.register({}),
     TenantModule,
     LandlordModule,
@@ -34,6 +43,6 @@ import { RegistrationModule } from '@app/common/registration/registration.module
     PrismaModule,
   ],
   controllers: [],
-  providers: [UsersService, UsersResolver],
+  providers: [UsersService, JwtStrategy],
 })
 export class UsersModule {}

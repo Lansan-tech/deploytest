@@ -7,6 +7,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { JwtModule } from '@nestjs/jwt';
+import { JwtStrategy } from 'apps/auth/src/strategy/jwt.strategy';
 import { InvoicesController } from './invoices.controller';
 import { InvoicesService } from './invoices.service';
 import { InvoicesResolver } from './resolver/invoices.resolver';
@@ -27,6 +28,6 @@ import { InvoicesResolver } from './resolver/invoices.resolver';
     PosterModule,
   ],
   controllers: [InvoicesController],
-  providers: [InvoicesService, InvoicesResolver],
+  providers: [InvoicesService, InvoicesResolver, JwtStrategy],
 })
 export class InvoicesModule {}

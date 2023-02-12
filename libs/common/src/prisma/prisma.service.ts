@@ -1,5 +1,5 @@
 import { INestApplication, Injectable, OnModuleInit } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
@@ -11,5 +11,10 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     this.$on('beforeExit', async () => {
       await app.close();
     });
+  }
+
+  query(sql: string) {
+    const sqlToRun = Prisma.sql([sql]);
+    return this.$queryRaw(sqlToRun);
   }
 }

@@ -10,7 +10,10 @@ import {
 import { Invoices, Poster } from './entity/invoice.entity';
 import { PosterService } from '@app/common/poster/poster.service';
 import { PosterOptions } from './Dtos';
+import { UseGuards } from '@nestjs/common';
+import { JwtGuard } from 'apps/auth/src/guard';
 
+@UseGuards(JwtGuard)
 @Resolver(() => [Invoices])
 export class InvoicesResolver {
   constructor(
@@ -47,15 +50,4 @@ export class InvoicesResolver {
   getClientInvoice(@Args('clientName') clientName: string) {
     return this.posterService.getInvoiceByClient(`client.name=${clientName}`);
   }
-  // @Query(() => Invoices)
-  // findInvoice(@Args('id') id: number): Invoices {
-  //   return {
-  //     invoice :[{client: '', full_name}]
-  //   };
-  // }
-
-  // @ResolveField(() => User)
-  // user(@Parent() post: Invoices) {
-  //   return { __typename: 'User', id: post.user.id };
-  // }
 }

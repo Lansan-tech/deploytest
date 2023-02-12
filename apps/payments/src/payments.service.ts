@@ -1,4 +1,9 @@
-import { PrismaService } from '@app/common';
+import {
+  PageDto,
+  PageMetaDto,
+  PageOptionsDto,
+  PrismaService,
+} from '@app/common';
 import { Injectable } from '@nestjs/common';
 import { PaymentDto } from './Dtos/create-payment.dto';
 
@@ -7,6 +12,7 @@ export class PaymentsService {
   constructor(private prismaService: PrismaService) {}
   async create(payment: PaymentDto) {
     try {
+      //TODO: Before creating payment dispacth call to mpesa.
       const newPayment = await this.prismaService.payment.create({
         data: {
           date: new Date().toString(),
@@ -27,13 +33,22 @@ export class PaymentsService {
     }
   }
 
-  async retriveAll() {
+  async retriveAll(pageOptions: PageOptionsDto) {
     try {
-      return this.prismaService.payment.findMany({
+      const payments = await this.prismaService.payment.findMany({
         include: {
           client_payment_clientToclient: true,
         },
       });
+      //Get count for pagination.
+      const count = await this.prismaService.payment.count();
+
+      const pageMetaDto = new PageMetaDto({
+        itemCount: count,
+        pageOptionsDto: pageOptions,
+      });
+
+      return new PageDto(payments, pageMetaDto);
     } catch (e) {
       return e.massage;
     }

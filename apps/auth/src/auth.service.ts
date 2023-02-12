@@ -27,6 +27,7 @@ export class AuthService {
         data: {
           email: dto.email,
           name: dto.name,
+          imageUrl: dto.imageUrl,
         },
       });
       return this.signToken(user.id, user.email);
@@ -49,7 +50,7 @@ export class AuthService {
     };
     const secret = this.config.get('JWT_SECRET');
     const token = await this.jwt.signAsync(payload, {
-      expiresIn: '15m',
+      expiresIn: '1day',
       secret: secret,
     });
 
@@ -57,7 +58,11 @@ export class AuthService {
       access_token: token,
     };
   }
-  getUserById(id: number) {
-    return { id: 1 };
+  async getUserById(id: number) {
+    return await this.prismaService.user.findUnique({
+      where: {
+        id: id,
+      },
+    });
   }
 }

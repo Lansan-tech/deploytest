@@ -1,9 +1,8 @@
 import { PrismaService } from '@app/common';
-import { Injectable } from '@nestjs/common';
-import { GetUser } from 'apps/auth/src/decorator';
-import { User } from 'apps/auth/src/resolver/entity/user.entity';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { TenantDto } from './Dtos/create-tenant.dto';
 import { ReconcileDto } from './Dtos/recon-account.dto';
+import { User } from './entity/user.entiry';
 
 @Injectable()
 export class TenantService {
@@ -11,15 +10,21 @@ export class TenantService {
   async getClientuser(userId: number) {
     const client = this.prismaService.client.findUnique({
       where: {
-        userId: userId
+        userId: userId,
       },
     });
     return client;
   }
-  async create(tenant: TenantDto) {
+  async create(user: User, tenant: TenantDto) {
     try {
       const newClient = await this.prismaService.client.create({
         data: {
+          user: {
+            connect: {
+              id: user.id,
+            },
+          },
+          title: tenant.title,
           name: tenant.name,
           contact: tenant.contact,
           email: tenant.email,
@@ -29,8 +34,8 @@ export class TenantService {
             create: {
               amount: tenant.agreement.amount,
               valid: 1,
-              terminated: tenant.agreement.terminated,
-              start_date: tenant.agreement.startDate,
+              terminated: new Date(tenant.agreement.terminated),
+              start_date: new Date(tenant.agreement.startDate),
               room_agreement_roomToroom: {
                 connect: {
                   uid: tenant.agreement.room.uid,
@@ -41,7 +46,7 @@ export class TenantService {
           balance_initial_balance_initial_clientToclient: {
             create: {
               amount: tenant.balance_initial.amount,
-              date: new Date().toDateString(),
+              date: new Date(),
             },
           },
           subscription_subscription_clientToclient: {
@@ -52,9 +57,10 @@ export class TenantService {
           },
         },
       });
+      console.log(newClient);
       return newClient;
     } catch (e) {
-      return e.message;
+      throw new BadRequestException(e.message);
     }
   }
 
