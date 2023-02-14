@@ -1,5 +1,10 @@
-export const PropertyFlow = {
+import { Flow } from './type';
+
+export const PropertyFlow: Flow = {
   'Property Info': {
+    tableName: 'property',
+    isMultiple: true,
+    populate: true,
     fields: [
       {
         id: 'propertyName',
@@ -25,6 +30,7 @@ export const PropertyFlow = {
         name: 'propertyLandlord',
         label: 'Property Landlord',
         options: {
+          values: [],
           tableName: 'agent',
           fields: ['username', 'name'],
         },
@@ -35,6 +41,7 @@ export const PropertyFlow = {
         name: 'propertyLandlord',
         label: 'Property Landlord',
         options: {
+          values: [],
           tableName: 'agent',
           fields: ['username', 'name'],
         },
@@ -48,6 +55,8 @@ export const PropertyFlow = {
     ],
   },
   'Services Offered': {
+    populate: true,
+    tableName: 'services',
     fields: [
       {
         id: 'serviceName',
@@ -76,6 +85,7 @@ export const PropertyFlow = {
     ],
   },
   'Water Connection': {
+    tableName: 'wconnetion',
     fields: [
       {
         id: 'serviceName',
@@ -104,6 +114,7 @@ export const PropertyFlow = {
     ],
   },
   'Power Connection': {
+    tableName: 'econnection',
     fields: [
       {
         id: 'serviceName',

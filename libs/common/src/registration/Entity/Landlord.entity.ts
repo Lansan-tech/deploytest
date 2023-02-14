@@ -1,81 +1,38 @@
-export const landlordRegistration = {
-  'Client Orientation': {
+import { Flow } from './type';
+
+export const landlordRegistration: Flow = {
+  'Landlord Info': {
+    tableName: 'landlord',
+    populate: false,
     fields: [
       {
-        id: 'clientName',
-        label: 'Client Name',
+        id: 'landlordName',
+        label: 'Landlords Name',
         name: 'clientName',
         type: 'text',
       },
       {
-        type: 'select',
-        id: 'clientServices',
-        name: 'clientServices',
-        label: 'Provided Services',
-        options: [
-          {
-            label: 'It service',
-            value: 'It Services',
-          },
-        ],
-      },
-      {
-        type: 'radio',
-        id: 'clientqualterly',
-        name: 'clientQualterly',
-        label: 'Does the Client Pay Quaterly',
-      },
-    ],
-    definations: [
-      {
-        label: 'It service',
-        value: 'It Services',
-      },
-    ],
-  },
-  'Client Agreement': {
-    fields: [
-      {
-        id: 'agreementStartDate',
-        label: 'Client Name',
-        name: 'agreementStartDate',
-        type: 'date',
-      },
-      {
-        type: 'date',
-        id: 'agreementEndDate',
-        name: 'agreementEndDate',
-        label: 'Provided Services',
-      },
-      {
-        type: 'radio',
-        id: 'clientqualterly',
-        name: 'clientQualterly',
-        label: 'Does the Client Pay Quaterly',
-      },
-      {
-        type: 'select',
-        id: 'agreementUnit',
-        label: 'Rental Unit',
-        name: 'agreementUnit',
-        options: [
-          {
-            value: 'Room number',
-            label: 'room number',
-          },
-        ],
+        type: 'text',
+        id: 'landlordTitle',
+        name: 'landlordTitle',
+        label: 'Landlords Title',
       },
       {
         type: 'number',
-        id: 'agreementPrice',
-        name: 'agreementPrice',
-        label: 'Agreement Price',
+        id: 'paybillNo',
+        name: 'paybillNo',
+        label: 'Mpesa Paybill Number',
       },
     ],
     definations: [
       {
-        label: 'It service',
-        value: 'It Services',
+        label: 'LandLords Name',
+        value: 'Collected for Identification',
+      },
+      {
+        label: 'Landlords Title',
+        value:
+          'A descriptive Title for the landlord, Used On Notification headers and communication',
       },
     ],
   },

@@ -1,5 +1,6 @@
 import { PrismaService } from '@app/common';
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { userInfo } from 'os';
 import { TenantDto } from './Dtos/create-tenant.dto';
 import { ReconcileDto } from './Dtos/recon-account.dto';
 import { User } from './entity/user.entiry';
@@ -17,11 +18,24 @@ export class TenantService {
   }
   async create(user: User, tenant: TenantDto) {
     try {
+      //Create a new User
+      const newUser = await this.prismaService.user.create({
+        data: {
+          email: tenant.email,
+          name: tenant.name,
+          agent: {
+            connect: {
+              userId: user.id,
+            },
+          },
+          user_type: 'CLIENT',
+        },
+      });
       const newClient = await this.prismaService.client.create({
         data: {
           user: {
             connect: {
-              id: user.id,
+              id: newUser.id,
             },
           },
           title: tenant.title,

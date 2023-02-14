@@ -15,6 +15,7 @@ import { RegistrationModule } from '@app/common/registration/registration.module
 import { CaslModule } from 'nest-casl';
 import { Roles } from '../../roles/roles';
 import { JwtStrategy } from 'apps/auth/src/strategy/jwt.strategy';
+import { AgentModule } from './agent/agent.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { JwtStrategy } from 'apps/auth/src/strategy/jwt.strategy';
     CaretakerModule,
     RegistrationModule,
     PrismaModule,
+    AgentModule,
   ],
   controllers: [],
   providers: [UsersService, JwtStrategy],

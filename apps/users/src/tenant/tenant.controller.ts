@@ -6,23 +6,21 @@ import { JwtGuard } from 'apps/auth/src/guard';
 import { TenantService } from './tenant.service';
 
 @UseGuards(JwtGuard)
-@Controller('tenant')
+@Controller('userRegistration')
 export class TenantController {
-  constructor(
-    private tenantService: TenantService,
-    private registrationService: RegistrationService,
-  ) {}
+  constructor(private registrationService: RegistrationService) {}
+
   @Get('flow/client')
   clientFlow(@GetUser() user: AuthDto) {
     return this.registrationService.tenantRegistrationFlow(user);
   }
   @Get('flow/landlord')
   landlordFlow(@GetUser() user: AuthDto) {
-    return this.registrationService.tenantRegistrationFlow(user);
+    return this.registrationService.landlordRegistrationFlow(user);
   }
 
   @Get('flow/property')
   propertyFlow(@GetUser() user: AuthDto) {
-    return this.registrationService.tenantRegistrationFlow(user);
+    return this.registrationService.propertyRegistrationFlow(user);
   }
 }
