@@ -2,6 +2,7 @@ import { DynamicModule, INestApplication, NestModule } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { AuthService } from '../../../../apps/auth/src/auth.service';
 import { AuthModule } from '../../../../apps/auth/src/auth.module';
+import { PrismaService } from '../prisma/prisma.service';
 
 export class IntergrationTestManager {
   private app: INestApplication;
@@ -9,6 +10,7 @@ export class IntergrationTestManager {
   private appModule: any;
   public httpServer: any;
   private authModule: INestApplication;
+  public dbConnection: PrismaService;
 
   constructor(appModule: any) {
     this.appModule = appModule;
@@ -29,6 +31,9 @@ export class IntergrationTestManager {
     await this.app.init();
     //Get the server to make request to
     this.httpServer = this.app.getHttpServer();
+
+    //Extract databse layer
+    this.dbConnection = this.app.get<PrismaService>(PrismaService);
 
     //Login a user.
     const authService = this.authModule.get<AuthService>(AuthService);

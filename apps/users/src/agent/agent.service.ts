@@ -32,6 +32,7 @@ export class AgentService {
         data: {
           name: agent.name,
           title: agent.title,
+          username: agent.username,
         },
       });
 
@@ -41,17 +42,14 @@ export class AgentService {
     }
   }
   async create(user: User, agent: CreateAgentDto) {
+    console.log(user);
     try {
       const newAgent = await this.prismaService.agent.create({
         data: {
+          userId: user.id,
           name: agent.name,
           title: agent.title,
           username: agent.username,
-          user: {
-            connect: {
-              id: user.id,
-            },
-          },
         },
       });
 

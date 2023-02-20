@@ -1,9 +1,9 @@
 import { IntergrationTestManager } from '@app/common';
-import { User } from '../../../auth/src/resolver/entity/user.entity';
 import { UsersModule } from '../../src/users.module';
 import request from 'supertest-graphql';
 import gql from 'graphql-tag';
-import { AgentStub } from '../stubs';
+import { AgentStub, AgentUpdate } from '../stubs';
+import { AgentUser } from '../../src/agent/entity/agent.entity';
 
 describe('Given a user has already logged in', () => {
   const intergrationtestManger = new IntergrationTestManager(UsersModule);
@@ -13,30 +13,82 @@ describe('Given a user has already logged in', () => {
   });
   describe('When Create agent Mutataion has been called', () => {
     let userToken: string;
-    let createdUser: User;
+    let createdUser: AgentUser;
     beforeAll(async () => {
+      //Delete any exsisting user in the agent tabl
+      //Initaile underlyinng app
+      await intergrationtestManger.beforeAll();
+      await intergrationtestManger.dbConnection.agent.deleteMany({});
+      //get User access token
       userToken = intergrationtestManger.getAccessToken();
-
-      const response = await request<{ user: User }>(
+      //make the request
+      const response = await request<{ createAgent: AgentUser }>(
         intergrationtestManger.httpServer,
       )
         .mutate(
           gql`
-        mutation createAgent($createAgentData: CreateAgentDto!){
-          createAgent(agentDto: @createAgentData) {
-            username
-          }
-        }
-      `,
+            mutation createAgent($createAgentData: CreateAgentDto!) {
+              createAgent(agentDto: $createAgentData) {
+                agent
+                username
+              }
+            }
+          `,
         )
-        .variables(AgentStub)
-        .set('authorization', `Bearer ${userToken}`);
+        .variables({
+          createAgentData: {
+            ...AgentStub,
+          },
+        })
+        .set('authorization', `Bearer ${userToken}`)
+        .expectNoErrors();
 
-      createdUser = response.data.user;
+      createdUser = response.data.createAgent;
     });
     test('An agent should be created and liked to the current logged in user', async () => {
       expect(createdUser).toMatchObject({
         username: AgentStub.username,
+      });
+    });
+
+    test('User should exist in database', async () => {
+      const agent = await intergrationtestManger.dbConnection.agent.findUnique({
+        where: {
+          username: AgentStub.username,
+        },
+      });
+      expect(agent).toBeDefined();
+    });
+
+    test('User can be updated', async () => {
+      console.log(createdUser);
+      const response = await request<{ updateAgent: AgentUser }>(
+        intergrationtestManger.httpServer,
+      )
+        .mutate(
+          gql`
+            mutation createAgent(
+              $agentId: Int!
+              $updateAgentData: UpdateAgentDto!
+            ) {
+              updateAgent(agent: $agentId, updateAgentDto: $updateAgentData) {
+                agent
+                username
+              }
+            }
+          `,
+        )
+        .variables({
+          updateAgentData: {
+            ...AgentUpdate,
+          },
+          agentId: createdUser.agent,
+        })
+        .set('authorization', `Bearer ${userToken}`)
+        .expectNoErrors();
+      const updateAgent = response.data.updateAgent;
+      expect(updateAgent).toMatchObject({
+        username: AgentUpdate.username,
       });
     });
   });

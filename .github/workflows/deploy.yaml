@@ -14,6 +14,22 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+
+  test: 
+    runs-on: ubuntu-latest
+    container: node:18
+  
+  env:
+    DB_DATABASE: test_db
+    DB_USER: root
+    DB_PASSWORD: root
+    
+  steps:
+    - name: Set up MySQL
+      run: |
+        sudo /etc/init.d/mysql start
+        mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
+      
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
@@ -24,7 +40,6 @@ jobs:
       matrix:
         include:
           - dockerfile: ./apps/auth/Dockerfile
-            image: ghcr.io/lansan-tech/authservice
             name: auth
           - dockerfile: ./apps/gateway/Dockerfile
             image: ghcr.io/lansan-tech/gatewayservice
