@@ -27,7 +27,8 @@ jobs:
       - name: Verify MySQL connection from host
         run: |
           apt-get update
-          apt-get install -y mysql-client
+          apt-get install default-mysql-client
+          apt-get install default-libmysqlclient-dev
           mysql --host mydb -uroot -ppassword -e "SHOW DATABASES"
 
   # This workflow contains a single job called "build"
