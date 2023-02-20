@@ -3,8 +3,8 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { PrismaService } from '@app/common';
-import { AuthDto } from './dto';
-import { LoginInput } from './dto/login-input.dto';
+import { AuthDto } from '../../../libs/common/src/auth/dto';
+import { LoginInput } from '../../../libs/common/src/auth/dto/login-input.dto';
 
 @Injectable()
 export class AuthService {

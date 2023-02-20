@@ -14,7 +14,7 @@ import { PrismaModule } from '@app/common';
 import { RegistrationModule } from '@app/common/registration/registration.module';
 import { CaslModule } from 'nest-casl';
 import { Roles } from '../../roles/roles';
-import { JwtStrategy } from 'apps/auth/src/strategy/jwt.strategy';
+import { JwtStrategy } from '@app/common';
 import { AgentModule } from './agent/agent.module';
 
 @Module({

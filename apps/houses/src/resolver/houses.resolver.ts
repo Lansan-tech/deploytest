@@ -1,6 +1,6 @@
 import { UseGuards } from '@nestjs/common';
 import { Mutation, Resolver } from '@nestjs/graphql';
-import { JwtGuard } from 'apps/auth/src/guard';
+import { JwtGuard } from '@app/common';
 import { Property } from '../Dtos/create-property.dto';
 import { HousesService } from '../houses.service';
 

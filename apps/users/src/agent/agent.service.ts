@@ -1,6 +1,10 @@
 import { PrismaService } from '@app/common';
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { AgentDto } from './Dtos';
+import {
+  BadGatewayException,
+  BadRequestException,
+  Injectable,
+} from '@nestjs/common';
+import { CreateAgentDto, UpdateAgentDto } from './Dtos';
 import { User } from './entity/user.entity';
 
 @Injectable()
@@ -19,13 +23,30 @@ export class AgentService {
       throw new BadRequestException(error.message);
     }
   }
-  async create(user: User, agent: AgentDto) {
+  async update(id: number, agent: UpdateAgentDto) {
     try {
-      const newgent = await this.prismaService.agent.create({
+      const updatedAgent = await this.prismaService.agent.update({
+        where: {
+          agent: id,
+        },
         data: {
           name: agent.name,
           title: agent.title,
-          username: agent.userame,
+        },
+      });
+
+      return updatedAgent;
+    } catch (error) {
+      throw new BadGatewayException(error.message);
+    }
+  }
+  async create(user: User, agent: CreateAgentDto) {
+    try {
+      const newAgent = await this.prismaService.agent.create({
+        data: {
+          name: agent.name,
+          title: agent.title,
+          username: agent.username,
           user: {
             connect: {
               id: user.id,
@@ -33,6 +54,8 @@ export class AgentService {
           },
         },
       });
+
+      return newAgent;
     } catch (error) {
       throw new BadRequestException(error.message);
     }

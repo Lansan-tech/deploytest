@@ -1,7 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import { Resolver, Args, Mutation } from '@nestjs/graphql';
-import { GetUser } from 'apps/auth/src/decorator';
-import { JwtGuard } from 'apps/auth/src/guard';
+import { GetUser } from '@app/common';
+import { JwtGuard } from '@app/common';
 import { LandlordDto } from '../Dtos/landlord-input.dto';
 import { Landlord } from '../entity/landlord.entity';
 import { User } from '../entity/user.entity';

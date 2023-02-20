@@ -10,7 +10,7 @@ import { PrismaModule } from '@app/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthResolver } from './resolver/auth.resolver';
 import { User } from './resolver/entity/user.entity';
-import { JwtStrategy } from './strategy/jwt.strategy';
+import { JwtStrategy } from '@app/common';
 
 @Module({
   imports: [

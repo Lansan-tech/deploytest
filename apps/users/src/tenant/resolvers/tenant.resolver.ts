@@ -3,10 +3,10 @@ import { ReconResponse, Tenant } from '../entity/tenant.entity';
 import { TenantDto } from '../Dtos/create-tenant.dto';
 import { ReconcileDto } from '../Dtos/recon-account.dto';
 import { TenantService } from '../tenant.service';
-import { GetUser } from 'apps/auth/src/decorator';
+import { GetUser } from '@app/common';
 import { User } from '../entity/user.entiry';
 import { UseGuards } from '@nestjs/common';
-import { JwtGuard } from 'apps/auth/src/guard';
+import { JwtGuard } from '@app/common/auth/guard';
 
 @UseGuards(JwtGuard)
 @Resolver()

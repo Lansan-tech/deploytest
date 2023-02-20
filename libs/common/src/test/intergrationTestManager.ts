@@ -6,7 +6,7 @@ import { AppModule } from 'apps/gateway/src/app.module';
 export class IntergrationTestManager {
   private app: INestApplication;
   private accessToken: string;
-  async beforAll() {
+  async beforeAll() {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();

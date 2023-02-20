@@ -8,10 +8,10 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import { Invoices, Poster } from './entity/invoice.entity';
-import { PosterService } from '@app/common/poster/poster.service';
+import { PosterService } from '@app/common';
 import { PosterOptions } from './Dtos';
 import { UseGuards } from '@nestjs/common';
-import { JwtGuard } from 'apps/auth/src/guard';
+import { JwtGuard } from '@app/common/auth/guard';
 
 @UseGuards(JwtGuard)
 @Resolver(() => [Invoices])

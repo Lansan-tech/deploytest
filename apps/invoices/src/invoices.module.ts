@@ -7,7 +7,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { JwtModule } from '@nestjs/jwt';
-import { JwtStrategy } from 'apps/auth/src/strategy/jwt.strategy';
+import { JwtStrategy } from '@app/common';
 import { InvoicesController } from './invoices.controller';
 import { InvoicesService } from './invoices.service';
 import { InvoicesResolver } from './resolver/invoices.resolver';

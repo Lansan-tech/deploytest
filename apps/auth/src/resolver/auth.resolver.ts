@@ -7,9 +7,9 @@ import {
   ResolveReference,
 } from '@nestjs/graphql';
 import { AuthService } from '../auth.service';
-import { GetUser } from '../decorator';
-import { LoginInput } from '../dto/login-input.dto';
-import { JwtGuard } from '../guard';
+import { GetUser } from '@app/common';
+import { LoginInput } from '../../../../libs/common/src/auth/dto/login-input.dto';
+import { JwtGuard } from '@app/common';
 import { AccessToken, User } from './entity/user.entity';
 
 @Resolver(() => User)

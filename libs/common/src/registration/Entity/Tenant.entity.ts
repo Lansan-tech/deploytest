@@ -1,5 +1,10 @@
-export const clientRegistration = {
+import { Flow } from './type';
+
+export const clientRegistration: Flow = {
   'Client Orientation': {
+    tableName: 'client',
+    isMultiple: true,
+    populate: true,
     fields: [
       {
         id: 'clientName',
@@ -12,12 +17,11 @@ export const clientRegistration = {
         id: 'clientServices',
         name: 'clientServices',
         label: 'Provided Services',
-        options: [
-          {
-            label: 'It service',
-            value: 'It Services',
-          },
-        ],
+        options: {
+          fields: [],
+          tableName: '',
+          values: [],
+        },
       },
       {
         type: 'radio',
@@ -34,6 +38,9 @@ export const clientRegistration = {
     ],
   },
   'Client Agreement': {
+    tableName: 'agreement',
+    isMultiple: false,
+    populate: true,
     fields: [
       {
         id: 'agreementStartDate',
@@ -58,12 +65,11 @@ export const clientRegistration = {
         id: 'agreementUnit',
         label: 'Rental Unit',
         name: 'agreementUnit',
-        options: [
-          {
-            value: 'Room number',
-            label: 'room number',
-          },
-        ],
+        options: {
+          fields: [],
+          tableName: '',
+          values: [],
+        },
       },
       {
         type: 'number',

@@ -1,11 +1,11 @@
 import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
-export class AgentDto {
+export class CreateAgentDto {
   @Field()
   name: string;
   @Field()
   title: string;
   @Field()
-  userame: string;
+  username: string;
 }

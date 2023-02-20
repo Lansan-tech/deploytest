@@ -1,6 +1,6 @@
 import { PrismaService } from '@app/common';
 import { BadRequestException, Injectable, UseGuards } from '@nestjs/common';
-import { JwtGuard } from 'apps/auth/src/guard';
+import { JwtGuard } from '@app/common';
 import { LandlordDto } from './Dtos/landlord-input.dto';
 import { User } from './entity/user.entity';
 

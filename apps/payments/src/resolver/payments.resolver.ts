@@ -1,3 +1,4 @@
+import { PageOptionsDto } from '@app/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { PaymentDto } from '../Dtos/create-payment.dto';
 import { Payment } from '../Entity/Payment.entity';
@@ -13,8 +14,8 @@ export class PaymentsResolver {
   }
 
   @Query(() => [Payment])
-  retrivaAll() {
-    return this.paymentsService.retriveAll();
+  retrivaAll(@Args() pageOptions: PageOptionsDto) {
+    return this.paymentsService.retriveAll(pageOptions);
   }
 
   @Query(() => Payment)

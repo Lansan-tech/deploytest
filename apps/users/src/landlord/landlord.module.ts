@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { JwtStrategy } from 'apps/auth/src/strategy/jwt.strategy';
+import { JwtStrategy } from '@app/common';
 import { LandlordService } from './landlord.service';
 import { LandlordResolver } from './resolvers/landlord.resolver';
 

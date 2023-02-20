@@ -5,8 +5,8 @@ import {
   PrismaService,
 } from '@app/common';
 import { Injectable, UseGuards } from '@nestjs/common';
-import { JwtGuard } from 'apps/auth/src/guard';
-import { UserInputDto } from './Dtos/create-user.dto';
+import { JwtGuard } from '@app/common/auth/guard';
+import { UserInputDto } from './Dtos';
 
 @UseGuards(JwtGuard)
 @Injectable()
