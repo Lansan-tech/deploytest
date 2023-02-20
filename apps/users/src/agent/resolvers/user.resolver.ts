@@ -1,5 +1,5 @@
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
-import { Agent } from '../entity/agent.entity';
+import { AgentUser } from '../entity/agent.entity';
 import { AgentService } from './../agent.service';
 import { User } from '../entity/user.entity';
 
@@ -7,8 +7,8 @@ import { User } from '../entity/user.entity';
 export class UsersResolver {
   constructor(private readonly agentService: AgentService) {}
 
-  @ResolveField(() => Agent)
-  public async tenant(@Parent() user: User): Promise<Agent> {
+  @ResolveField(() => AgentUser)
+  public async tenant(@Parent() user: User): Promise<AgentUser> {
     return await this.agentService.getAgentByUser(user.id);
   }
 }

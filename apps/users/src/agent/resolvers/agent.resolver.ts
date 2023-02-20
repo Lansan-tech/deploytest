@@ -1,16 +1,16 @@
 import { Mutation, Resolver } from '@nestjs/graphql';
 import { GetUser } from '@app/common';
 import { AgentService } from '../agent.service';
-import { AgentDto } from '../Dtos';
-import { Agent } from '../entity/agent.entity';
+import { CreateAgentDto } from '../Dtos';
+import { AgentUser } from '../entity/agent.entity';
 import { User } from '../entity/user.entity';
 
-@Resolver(() => Agent)
+@Resolver(() => AgentUser)
 export class AgentResolver {
   constructor(private agentService: AgentService) {}
 
-  @Mutation(() => Agent)
-  creeateAgent(@GetUser() user: User, agentDto: AgentDto) {
+  @Mutation(() => AgentUser)
+  creeateAgent(@GetUser() user: User, agentDto: CreateAgentDto) {
     return this.agentService.create(user, agentDto);
   }
 }

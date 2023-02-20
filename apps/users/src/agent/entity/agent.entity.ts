@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class Agent {
+export class AgentUser {
   @Field()
   name: string;
   @Field()

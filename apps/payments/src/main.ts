@@ -4,7 +4,7 @@ import { PaymentsModule } from './payments.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(PaymentsModule);
-  app.use(new ValidationPipe({ transform: true }));
-  await app.listen(5050);
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  await app.listen(5001);
 }
 bootstrap();

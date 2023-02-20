@@ -1,5 +1,5 @@
 import { Directive, ObjectType, Field, ID } from '@nestjs/graphql';
-import { Agent } from './agent.entity';
+import { AgentUser } from './agent.entity';
 
 @ObjectType()
 @Directive('@extends')
@@ -9,6 +9,6 @@ export class User {
   @Directive('@external')
   id: number;
 
-  @Field(() => Agent)
-  tenant?: Agent;
+  @Field(() => AgentUser)
+  tenant?: AgentUser;
 }
