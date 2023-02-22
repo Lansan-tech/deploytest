@@ -13,16 +13,3 @@ export class User {
   @IsString()
   imageUrl: string;
 }
-
-@ObjectType()
-export class AccessToken {
-  @Field()
-  access_token: string;
-  refresh: string;
-}
-
-@InputType()
-export class loginInput {
-  @Field(() => String, { description: 'Generated access_token of the user' })
-  access_token: string;
-}

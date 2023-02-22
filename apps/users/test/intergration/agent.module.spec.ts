@@ -4,11 +4,12 @@ import request from 'supertest-graphql';
 import gql from 'graphql-tag';
 import { AgentStub, AgentUpdate } from '../stubs';
 import { AgentUser } from '../../src/agent/entity/agent.entity';
+import { User } from '../../src/agent/entity/user.entity';
 
 describe('Given a user has already logged in', () => {
   const intergrationtestManger = new IntergrationTestManager(UsersModule);
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     await intergrationtestManger.beforeAll();
   });
   describe('When Create agent Mutataion has been called', () => {
@@ -61,7 +62,6 @@ describe('Given a user has already logged in', () => {
     });
 
     test('User can be updated', async () => {
-      console.log(createdUser);
       const response = await request<{ updateAgent: AgentUser }>(
         intergrationtestManger.httpServer,
       )
@@ -89,6 +89,32 @@ describe('Given a user has already logged in', () => {
       const updateAgent = response.data.updateAgent;
       expect(updateAgent).toMatchObject({
         username: AgentUpdate.username,
+      });
+    });
+
+    test('Should return Agent User Profile', () => {
+      const response = request<{ agentProfile: User }>(
+        intergrationtestManger.httpServer,
+      )
+        .query(
+          gql`
+            query getAgentProfile(){
+              agentProfile {
+                name
+                email
+                inageUrl
+                agent {
+                  name
+                  title
+                }
+              }
+            }
+        `,
+        )
+        .expectNoErrors();
+      const agentProfile = response;
+      expect(agentProfile).toMatchObject({
+        username: AgentStub.username,
       });
     });
   });

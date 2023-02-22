@@ -8,7 +8,7 @@ export class UsersResolver {
   constructor(private readonly agentService: AgentService) {}
 
   @ResolveField(() => AgentUser)
-  public async tenant(@Parent() user: User): Promise<AgentUser> {
+  public async agent(@Parent() user: User): Promise<AgentUser> {
     return await this.agentService.getAgentByUser(user.id);
   }
 }

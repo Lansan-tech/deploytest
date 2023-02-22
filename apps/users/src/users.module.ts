@@ -2,7 +2,7 @@ import {
   ApolloFederationDriverConfig,
   ApolloFederationDriver,
 } from '@nestjs/apollo';
-import { forwardRef, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { JwtModule } from '@nestjs/jwt';
@@ -11,11 +11,12 @@ import { TenantModule } from './tenant/tenant.module';
 import { LandlordModule } from './landlord/landlord.module';
 import { CaretakerModule } from './caretaker/caretaker.module';
 import { PrismaModule } from '@app/common';
-import { RegistrationModule } from '@app/common';
 import { CaslModule } from 'nest-casl';
 import { Roles } from '../../roles/roles';
 import { JwtStrategy } from '@app/common';
 import { AgentModule } from './agent/agent.module';
+import { UsersResolver } from './resolver/users.resolver';
+import { User } from './entity/user.entity';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { AgentModule } from './agent/agent.module';
       driver: ApolloFederationDriver,
       autoSchemaFile: true,
       buildSchemaOptions: {
-        orphanedTypes: [],
+        orphanedTypes: [User],
       },
     }),
     ConfigModule.forRoot({
@@ -44,6 +45,6 @@ import { AgentModule } from './agent/agent.module';
     AgentModule,
   ],
   controllers: [],
-  providers: [UsersService, JwtStrategy],
+  providers: [UsersService, JwtStrategy, UsersResolver],
 })
 export class UsersModule {}

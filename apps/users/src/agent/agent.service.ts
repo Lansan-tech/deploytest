@@ -10,7 +10,7 @@ import { User } from './entity/user.entity';
 @Injectable()
 export class AgentService {
   constructor(private prismaService: PrismaService) {}
-  async getAgentByUser(id: number) {
+  async findAgent(id: number) {
     try {
       const agent = await this.prismaService.agent.findUnique({
         where: {

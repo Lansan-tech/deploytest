@@ -4,7 +4,7 @@ import {
   PageOptionsDto,
   PrismaService,
 } from '@app/common';
-import { Injectable, UseGuards } from '@nestjs/common';
+import { BadRequestException, Injectable, UseGuards } from '@nestjs/common';
 import { JwtGuard } from '@app/common/auth/guard';
 import { UserInputDto } from './Dtos';
 
@@ -12,7 +12,20 @@ import { UserInputDto } from './Dtos';
 @Injectable()
 export class UsersService {
   constructor(private prismaService: PrismaService) {}
-  async allUsers(pageOptions: PageOptionsDto) {
+
+  async findById(id: number) {
+    try {
+      const user = await this.prismaService.user.findUnique({
+        where: {
+          id: id,
+        },
+      });
+      return user;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+  async findAll(pageOptions: PageOptionsDto) {
     try {
       const users = await this.prismaService.user.findMany({
         where: {

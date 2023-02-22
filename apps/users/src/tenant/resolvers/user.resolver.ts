@@ -4,7 +4,7 @@ import { TenantService } from './../tenant.service';
 import { User } from '../entity/user.entiry';
 
 @Resolver(() => User)
-export class UsersResolver {
+export class UserResolver {
   constructor(private readonly tenantService: TenantService) {}
 
   @ResolveField(() => Tenant)

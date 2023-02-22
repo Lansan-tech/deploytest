@@ -14,6 +14,8 @@ export class Tenant {
   email: string;
   @Field()
   quarterly: number;
+  @Field()
+  userId: number;
 }
 
 @ObjectType()

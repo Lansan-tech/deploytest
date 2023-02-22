@@ -8,6 +8,9 @@
 		},
 		{
 			"path": ".."
+		},
+		{
+			"path": "../../k8s-bootstrapper"
 		}
 	],
 	"settings": {}

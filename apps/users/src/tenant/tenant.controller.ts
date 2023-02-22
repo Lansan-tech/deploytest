@@ -1,7 +1,7 @@
 import { RegistrationService } from '@app/common/registration/registration.service';
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { GetUser } from '@app/common/auth/decorator';
-import { AuthDto } from '@app/common/auth/dto';
+import { AuthDto } from 'apps/auth/src/dto';
 import { JwtGuard } from '@app/common';
 
 @UseGuards(JwtGuard)
