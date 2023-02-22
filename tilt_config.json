@@ -1,0 +1,14 @@
+{
+    "allowed_contexts": [
+        "docker-desktop",
+        "minikube"
+    ],
+    "default_registry": "",
+    "microservices": [
+        "deploytest"
+    ],
+    "namespace": "knote",
+    "port_forwards": [
+        "knote:8080"
+    ]
+}
