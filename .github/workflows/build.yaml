@@ -10,7 +10,7 @@ on:
       - "!.github/workflows/**"
     
 env:
-  REGISTRY: registry.digitalocean.com/diabhey
+  REGISTRY: registry.digitalocean.com/lansan-cr
   IMAGE_NAME: ${{ github.repository }}
   
 jobs:
@@ -46,8 +46,8 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           builder: ${{ steps.buildx.outputs.name }}
-          context: ./pkg
-          file: ./pkg/Dockerfile
+          context: .
+          file: Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
