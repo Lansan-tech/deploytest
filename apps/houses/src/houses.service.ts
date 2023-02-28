@@ -1,16 +1,16 @@
 import { PrismaService } from '@app/common';
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Property } from './Dtos/create-property.dto';
+import { PropertyInput } from './Dtos/create-property.dto';
 
 @Injectable()
 export class HousesService {
   constructor(private prismaService: PrismaService) {}
-  async create(newProperty: Property) {
+  async create(newProperty: PropertyInput) {
     try {
       const createdProperty = await this.prismaService.property.create({
         data: {
           name: newProperty.name,
-          uid: newProperty.uuid,
+          uid: newProperty.uid,
           landlord_property_landlordTolandlord: {
             connect: {
               landlord: newProperty.landlord,
@@ -33,7 +33,7 @@ export class HousesService {
     }
   }
 
-  private buildRentalUnits(property: Property): any {
+  private buildRentalUnits(property: PropertyInput): any {
     return property.rentalUnits;
   }
 }

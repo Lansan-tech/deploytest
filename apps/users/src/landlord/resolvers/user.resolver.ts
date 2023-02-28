@@ -8,7 +8,7 @@ export class UsersResolver {
   constructor(private readonly landlordService: LandlordService) {}
 
   @ResolveField(() => Landlord)
-  public async tenant(@Parent() user: User): Promise<Landlord> {
+  public async landlord(@Parent() user: User): Promise<Landlord> {
     return await this.landlordService.getLandlordUser(user.id);
   }
 }

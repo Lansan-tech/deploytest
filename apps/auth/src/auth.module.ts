@@ -10,6 +10,7 @@ import { PrismaModule } from '@app/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthResolver } from './resolver/auth.resolver';
 import { JwtStrategy } from '@app/common';
+import configaration from './config/configaration';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { JwtStrategy } from '@app/common';
       },
     }),
     ConfigModule.forRoot({
+      load: [configaration],
       isGlobal: true,
     }),
     JwtModule.register({}),

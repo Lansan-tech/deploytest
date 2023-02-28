@@ -25,7 +25,7 @@ export class RentalUnit {
 }
 
 @InputType()
-export class Property {
+export class PropertyInput {
   @Field()
   @IsString()
   name: string;
@@ -44,7 +44,5 @@ export class Property {
   @IsString()
   agentUsername: string;
   @Field()
-  get uuid(): string {
-    return 'asdjskjdhfkajhsd';
-  }
+  uid: string;
 }

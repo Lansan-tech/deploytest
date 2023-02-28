@@ -12,7 +12,6 @@ import { UserInputDto } from './Dtos';
 @Injectable()
 export class UsersService {
   constructor(private prismaService: PrismaService) {}
-
   async findById(id: number) {
     try {
       const user = await this.prismaService.user.findUnique({
@@ -34,20 +33,16 @@ export class UsersService {
           },
         },
       });
-
       const count = await this.prismaService.user.count();
-
       const pageMetaDto = new PageMetaDto({
         itemCount: count,
         pageOptionsDto: pageOptions,
       });
-
       return new PageDto(users, pageMetaDto);
     } catch (e: any) {
       return e.message;
     }
   }
-
   async createUser(user: UserInputDto) {
     try {
       const newUser = await this.prismaService.user.create({
@@ -58,7 +53,6 @@ export class UsersService {
           user_type: user.user_type,
         },
       });
-
       return newUser;
     } catch (e: any) {
       return e.message;

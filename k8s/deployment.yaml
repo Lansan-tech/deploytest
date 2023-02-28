@@ -1,0 +1,25 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: auth
+spec:
+  selector:
+    matchLabels:
+      app: auth
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+        - name: auth
+          image: apps/auth
+          ports:
+            - containerPort: 8080
+          env:
+            - name: JWT_SECRET
+              value: ksjhfkljshflkjhslkjdhalsdhf
+            - name: DATABASE_URL
+              value: mysql://root:password@mysql:3306/rentals-db
+

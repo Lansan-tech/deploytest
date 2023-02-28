@@ -67,7 +67,7 @@ describe('Given a user has already logged in', () => {
       )
         .mutate(
           gql`
-            mutation createAgent(
+            mutation updateAgent(
               $agentId: Int!
               $updateAgentData: UpdateAgentDto!
             ) {
@@ -92,29 +92,24 @@ describe('Given a user has already logged in', () => {
       });
     });
 
-    test('Should return Agent User Profile', () => {
-      const response = request<{ agentProfile: User }>(
+    test('Should return Agent User Profile', async () => {
+      const response = await request<{ agentProfile: User }>(
         intergrationtestManger.httpServer,
       )
         .query(
           gql`
-            query getAgentProfile(){
+            query getAgentProfile {
               agentProfile {
-                name
-                email
-                inageUrl
-                agent {
-                  name
-                  title
-                }
+                username
               }
             }
-        `,
+          `,
         )
+        .set('authorization', `Bearer ${userToken}`)
         .expectNoErrors();
-      const agentProfile = response;
+      const agentProfile = response.data.agentProfile;
       expect(agentProfile).toMatchObject({
-        username: AgentStub.username,
+        username: AgentUpdate.username,
       });
     });
   });

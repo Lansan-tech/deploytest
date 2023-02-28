@@ -17,6 +17,7 @@ import { JwtStrategy } from '@app/common';
 import { AgentModule } from './agent/agent.module';
 import { UsersResolver } from './resolver/users.resolver';
 import { User } from './entity/user.entity';
+import { RegistrationModule } from './registration/registration.module';
 
 @Module({
   imports: [
@@ -24,7 +25,7 @@ import { User } from './entity/user.entity';
       driver: ApolloFederationDriver,
       autoSchemaFile: true,
       buildSchemaOptions: {
-        orphanedTypes: [User],
+        orphanedTypes: [],
       },
     }),
     ConfigModule.forRoot({
@@ -38,11 +39,12 @@ import { User } from './entity/user.entity';
       getUserFromRequest: (request) => request.user,
     }),
     JwtModule.register({}),
-    TenantModule,
-    LandlordModule,
-    CaretakerModule,
+    // TenantModule,
+    // LandlordModule,
+    // CaretakerModule,
     PrismaModule,
     AgentModule,
+    RegistrationModule,
   ],
   controllers: [],
   providers: [UsersService, JwtStrategy, UsersResolver],

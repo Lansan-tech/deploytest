@@ -1,5 +1,4 @@
 import { Injectable, UseGuards } from '@nestjs/common';
-import { AuthDto } from '@app/common';
 import { JwtGuard } from '../auth/guard';
 import { PrismaService } from '@app/common';
 import { landlordRegistration } from './Entity/Landlord.entity';
@@ -11,12 +10,11 @@ import { Field, Flow } from './Entity/type';
 @Injectable()
 export class RegistrationService {
   constructor(private prismaService: PrismaService) {}
-  tenantRegistrationFlow(user: AuthDto) {
+  tenantRegistrationFlow() {
     const flow = this.extarctPopulation(clientRegistration);
     return clientRegistration;
   }
-  landlordRegistrationFlow(user: AuthDto) {
-    console.log(user);
+  landlordRegistrationFlow() {
     const flow = this.extarctPopulation(landlordRegistration);
     return flow;
   }
@@ -35,7 +33,7 @@ export class RegistrationService {
     }
   }
 
-  propertyRegistrationFlow(user: AuthDto) {
+  propertyRegistrationFlow() {
     const flow = this.extarctPopulation(PropertyFlow);
     return flow;
   }

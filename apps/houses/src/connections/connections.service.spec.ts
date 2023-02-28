@@ -13,7 +13,12 @@ describe('ConnectionsService', () => {
     service = module.get<ConnectionsService>(ConnectionsService);
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
+  //Connection are the diffrent connected service to the property
+  //We have two types of connection:
+  // Water connection and electricty connection.
+  test('Should create a new Water connection', () => {
+    jest.spyOn(service, 'waterMeters').mockImplementation(() => ({
+
+    }))
+  })
 });

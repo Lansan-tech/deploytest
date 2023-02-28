@@ -37,12 +37,12 @@ export class AgentResolver {
   }
 
   @Query(() => AgentUser)
-  async agentProfle(@GetUser() user: User) {
+  async agentProfile(@GetUser() user: User) {
     return await this.agentService.findAgent(user.id);
   }
 
   @ResolveField((of) => User)
-  user(@Parent() tenant: AgentUser): any {
-    return { __typename: 'User', id: tenant.userId };
+  user(@Parent() agent: AgentUser): any {
+    return { __typename: 'User', id: agent.userId };
   }
 }

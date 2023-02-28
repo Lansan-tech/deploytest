@@ -11,15 +11,15 @@ export class TenantController {
 
   @Get('flow/client')
   clientFlow(@GetUser() user: AuthDto) {
-    return this.registrationService.tenantRegistrationFlow(user);
+    return this.registrationService.tenantRegistrationFlow();
   }
   @Get('flow/landlord')
   landlordFlow(@GetUser() user: AuthDto) {
-    return this.registrationService.landlordRegistrationFlow(user);
+    return this.registrationService.landlordRegistrationFlow();
   }
 
   @Get('flow/property')
   propertyFlow(@GetUser() user: AuthDto) {
-    return this.registrationService.propertyRegistrationFlow(user);
+    return this.registrationService.propertyRegistrationFlow();
   }
 }

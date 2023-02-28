@@ -39,4 +39,8 @@ export class ConnectionsService {
       return error.message;
     }
   }
+
+  async  createWaterConnection(params:type) {
+    
+  }
 }
