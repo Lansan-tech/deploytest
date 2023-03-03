@@ -11,7 +11,7 @@ import { GetUser, JwtGuard } from '@app/common';
 import { AgentService } from '../agent.service';
 import { CreateAgentDto, UpdateAgentDto } from '../Dtos';
 import { AgentUser } from '../entity/agent.entity';
-import { User } from '../entity/user.entity';
+import { User } from '../../entity/user.entity';
 import { UseGuards } from '@nestjs/common';
 import { Tenant } from '../../tenant/entity/tenant.entity';
 
@@ -41,8 +41,8 @@ export class AgentResolver {
     return await this.agentService.findAgent(user.id);
   }
 
-  @ResolveField((of) => User)
-  user(@Parent() agent: AgentUser): any {
-    return { __typename: 'User', id: agent.userId };
-  }
+  // @ResolveField((of) => User)
+  // user(@Parent() agent: AgentUser): any {
+  //   return { __typename: 'User', id: agent.userId };
+  // }
 }

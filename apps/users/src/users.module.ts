@@ -23,9 +23,11 @@ import { RegistrationModule } from './registration/registration.module';
   imports: [
     GraphQLModule.forRoot<ApolloFederationDriverConfig>({
       driver: ApolloFederationDriver,
-      autoSchemaFile: true,
+      autoSchemaFile: {
+        federation: 2,
+      },
       buildSchemaOptions: {
-        orphanedTypes: [],
+        orphanedTypes: [User],
       },
     }),
     ConfigModule.forRoot({
@@ -39,9 +41,9 @@ import { RegistrationModule } from './registration/registration.module';
       getUserFromRequest: (request) => request.user,
     }),
     JwtModule.register({}),
-    // TenantModule,
-    // LandlordModule,
-    // CaretakerModule,
+    TenantModule,
+    LandlordModule,
+    CaretakerModule,
     PrismaModule,
     AgentModule,
     RegistrationModule,

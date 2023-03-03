@@ -6,14 +6,11 @@
     "default_registry": "",
     "microservices": [
         "apps/auth",
-        "apps/houses",
-        "apps/invoices",
-        "apps/payments",
-        "apps/users",
         "apps/gateway"
+
     ],
     "namespace": "rentalsBackend",
     "port_forwards": [
-        "auth:8080"
+        "auth:4001"
     ]
 }

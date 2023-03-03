@@ -11,7 +11,7 @@ import {
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { JwtModule } from '@nestjs/jwt';
-import { Roles } from 'apps/roles/roles';
+import { Roles } from '../../roles/roles';
 import { CaslModule } from 'nest-casl';
 
 @Module({

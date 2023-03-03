@@ -1,20 +1,11 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsString } from 'class-validator';
 
 @InputType()
-export class Agent {
+export class CreateLandlordDto {
   @Field()
-  @IsString()
-  name: string;
-  @Field()
-  @IsString()
-  username: string;
-  @Field()
-  title: string;
-}
-
-@InputType()
-export class LandlordDto {
+  @IsEmail()
+  email: string;
   @Field()
   @IsString()
   name: string;
@@ -24,8 +15,5 @@ export class LandlordDto {
   @Field()
   paybill: number;
   @Field()
-  @IsBoolean()
-  hasAgent: boolean;
-  @Field(() => Agent)
-  agent: Agent;
+  imageUrl: string;
 }

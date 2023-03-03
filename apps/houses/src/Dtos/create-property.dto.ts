@@ -7,42 +7,33 @@ export class Services {
   description: string;
 }
 @InputType()
-export class RentalUnit {
+export class RentalUnitInput {
   @Field()
   @IsString()
   size: string;
   @Field()
   @IsString()
-  get uuid(): string {
-    return '';
+  get uid(): string {
+    return this.size + 'property';
   }
-  @Field()
-  @IsOptional()
-  vacant: boolean;
   @Field()
   @IsNumber()
   is_psuedo: number;
 }
 
 @InputType()
-export class PropertyInput {
+export class CreatePropertyInput {
   @Field()
   @IsString()
   name: string;
   @Field()
   @IsString()
   location: string;
-  @Field(() => [RentalUnit])
-  rentalUnits: [RentalUnit];
+  @Field(() => [RentalUnitInput], { nullable: true })
+  rentalUnits: [RentalUnitInput];
   @Field()
   @IsNumber()
   landlord: number;
-  @Field()
-  @IsNumber()
-  agent: number;
-  @Field()
-  @IsString()
-  agentUsername: string;
   @Field()
   uid: string;
 }

@@ -1,8 +1,7 @@
 import { Directive, Field, ObjectType } from '@nestjs/graphql';
-import { User } from './user.entity';
+import { User } from '../../entity/user.entity';
 
 @ObjectType()
-@Directive('@key(fields: "id")')
 export class AgentUser {
   @Field()
   agent: number;
@@ -12,8 +11,8 @@ export class AgentUser {
   title: string;
   @Field()
   username: string;
-  @Field()
-  user?: User;
-  @Field()
-  userId: number;
+  // @Field()
+  // user?: User;
+  // @Field()
+  // userId: number;
 }

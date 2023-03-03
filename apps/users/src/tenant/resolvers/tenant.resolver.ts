@@ -11,7 +11,7 @@ import { TenantDto } from '../Dtos/create-tenant.dto';
 import { ReconcileDto } from '../Dtos/recon-account.dto';
 import { TenantService } from '../tenant.service';
 import { GetUser } from '@app/common';
-import { User } from '../entity/user.entiry';
+import { User } from '../../entity/user.entity';
 import { UseGuards } from '@nestjs/common';
 import { JwtGuard } from '@app/common/auth/guard';
 

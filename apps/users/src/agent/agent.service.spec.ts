@@ -22,7 +22,10 @@ describe('AgentService', () => {
   it('Should create a new Agent', async () => {
     jest.spyOn(service, 'create').mockImplementation(async () => agentStub);
 
-    const agent = await service.create({ id: 1 }, agentStub);
+    const agent = await service.create(
+      { id: 1, imageUrl: '', name: '' },
+      agentStub,
+    );
     expect(agent).toMatchObject({
       username: agentStub.username,
     });

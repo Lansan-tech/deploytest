@@ -135,36 +135,40 @@ if cfg.get("default_registry") != "":
     default_registry(cfg.get("default_registry"))
 
 # Build base image for extention
-docker_build('rentals/backend', '.')
+docker_build('rentals/backend', '.', live_update=[
+    sync('package.json' , '/app')
+])
 
 # Build each microservice image as stated in the tilt_config.json file
 for microservice in cfg.get("microservices"):
     docker_build(
         microservice, microservice, live_update= [
-            sync(microservice, '/app'),
+            sync('./src', '/app'),
             run('cd /app && yarn install', trigger=['./package.json', './yarn.lock'])
         ]
     )
 
 # Deploy each microservice image as stated in the tilt_config.json file
 for microservice in cfg.get("microservices"):
-    k8s_yaml(['k8s/deployment.yaml', 'k8s/service.yaml', 'k8s/mysql_deployment.yaml', 'k8s/mysql_service.yaml', 'k8s/mysql_pv.yaml'])
+    k8s_yaml(['k8s/deployment.yaml', 'k8s/service.yaml', 'k8s/mysql_deployment.yaml', 'k8s/mysql_service.yaml', 'k8s/mysql_pv.yaml'], allow_duplicates=True)
 
-for port_forward in cfg.get("port_forwards"):
-    mapping = port_forward.split(":")
-    if (len(mapping) != 2):
-        fail(
-            """
-            # =================================================== #
-            # Invalid port forward specified in tilt_config.json! #
-            # Should be <resource>:<port_number>.                 #
-            #                                                     #
-            # E.g.: knote:8080                                     #
-            # =================================================== #
-            """
-        )
-    service = mapping[0]
-    port = mapping[1]
-    k8s_resource(service, port_forwards=port)
+
+k8s_resource("gateway:service:default:apps:1",  port_forwards=4000)
+# for port_forward in cfg.get("port_forwards"):
+#     mapping = port_forward.split(":")
+#     if (len(mapping) != 2):
+#         fail(
+#             """
+#             # =================================================== #
+#             # Invalid port forward specified in tilt_config.json! #
+#             # Should be <resource>:<port_number>.                 #
+#             #                                                     #
+#             # E.g.: knote:8080                                    #
+#             # =================================================== #
+#             """
+#         )
+#     service = mapping[0]
+#     port = mapping[1]
+#     k8s_resource(service, port_forwards=port)
 
 

@@ -20,6 +20,7 @@ export class AuthService {
       const found = await this.prismaService.user.findUnique({
         where: { email: dto.email },
       });
+      console.log(found);
       //If so return a token if not create and return a token
       if (found) return this.signToken(found.id, found.email);
       //User not found.
@@ -34,6 +35,7 @@ export class AuthService {
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
+          console.log(error);
           throw new ForbiddenException('Credentials taken');
         }
       }

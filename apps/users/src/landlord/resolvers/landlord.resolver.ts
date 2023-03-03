@@ -2,9 +2,9 @@ import { UseGuards } from '@nestjs/common';
 import { Resolver, Args, Mutation } from '@nestjs/graphql';
 import { GetUser } from '@app/common';
 import { JwtGuard } from '@app/common';
-import { LandlordDto } from '../Dtos/landlord-input.dto';
+import { CreateLandlordDto } from '../Dtos/landlord-input.dto';
 import { Landlord } from '../entity/landlord.entity';
-import { User } from '../entity/user.entity';
+import { User } from '../../entity/user.entity';
 import { LandlordService } from '../landlord.service';
 
 @UseGuards(JwtGuard)
@@ -14,8 +14,8 @@ export class LandlordResolver {
   @Mutation(() => Landlord)
   createLandlord(
     @GetUser() user: User,
-    @Args('landLordInput') landlordInput: LandlordDto,
+    @Args('createLandLordInput') createLandlordInput: CreateLandlordDto,
   ) {
-    return this.landlordService.create(user, landlordInput);
+    return this.landlordService.create(createLandlordInput);
   }
 }

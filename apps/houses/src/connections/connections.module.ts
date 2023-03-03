@@ -1,8 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConnectionsResolver } from './connections.resolver';
-import { ConnectionsService } from './connections.service';
+import { ElectrictyConnectionService } from './electrictyConnections.service';
+import { WaterConnectionService } from './waterConnection.service';
 
 @Module({
-  providers: [ConnectionsResolver, ConnectionsService],
+  providers: [
+    ConnectionsResolver,
+    ElectrictyConnectionService,
+    WaterConnectionService,
+  ],
 })
 export class ConnectionsModule {}

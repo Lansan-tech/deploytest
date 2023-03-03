@@ -2,23 +2,24 @@ import { IntergrationTestManager } from '@app/common';
 import { UsersModule } from '../../src/users.module';
 import request from 'supertest-graphql';
 import gql from 'graphql-tag';
-import { AgentStub, AgentUpdate } from '../stubs';
+import { AgentStub, AgentUpdate } from '@app/common';
 import { AgentUser } from '../../src/agent/entity/agent.entity';
-import { User } from '../../src/agent/entity/user.entity';
+import { User } from '../../src/entity/user.entity';
 
 describe('Given a user has already logged in', () => {
   const intergrationtestManger = new IntergrationTestManager(UsersModule);
 
-  beforeAll(async () => {
-    await intergrationtestManger.beforeAll();
-  });
   describe('When Create agent Mutataion has been called', () => {
     let userToken: string;
     let createdUser: AgentUser;
     beforeAll(async () => {
       //Delete any exsisting user in the agent tabl
       //Initaile underlyinng app
-      await intergrationtestManger.beforeAll();
+      await intergrationtestManger.beforeAll({
+        name: 'testing user',
+        email: 'testing@email.com',
+        imageUrl: 'http://localhost:3000/image.png',
+      });
       await intergrationtestManger.dbConnection.agent.deleteMany({});
       //get User access token
       userToken = intergrationtestManger.getAccessToken();

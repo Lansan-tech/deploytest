@@ -7,3 +7,9 @@ export const AgentStub = {
 export const AgentUpdate: Partial<typeof AgentStub> = {
   username: 'jimly2023',
 };
+
+export const DefaultAgent = {
+  name: 'Default',
+  title: 'Default Properties',
+  username: 'DefaultUser',
+};

@@ -5,7 +5,7 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { CreateAgentDto, UpdateAgentDto } from './Dtos';
-import { User } from './entity/user.entity';
+import { User } from '../entity/user.entity';
 
 @Injectable()
 export class AgentService {
@@ -42,7 +42,6 @@ export class AgentService {
     }
   }
   async create(user: User, agent: CreateAgentDto) {
-    console.log(user);
     try {
       const newAgent = await this.prismaService.agent.create({
         data: {

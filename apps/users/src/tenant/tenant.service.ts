@@ -3,7 +3,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { userInfo } from 'os';
 import { TenantDto } from './Dtos/create-tenant.dto';
 import { ReconcileDto } from './Dtos/recon-account.dto';
-import { User } from './entity/user.entiry';
+import { User } from '../entity/user.entity';
 
 @Injectable()
 export class TenantService {

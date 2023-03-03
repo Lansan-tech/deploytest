@@ -1,15 +1,15 @@
 import { PrismaService } from '@app/common';
 import { BadRequestException, Injectable, UseGuards } from '@nestjs/common';
 import { JwtGuard } from '@app/common';
-import { LandlordDto } from './Dtos/landlord-input.dto';
-import { User } from './entity/user.entity';
+import { CreateLandlordDto } from './Dtos/landlord-input.dto';
+import { User } from '../entity/user.entity';
 
 @UseGuards(JwtGuard)
 @Injectable()
 export class LandlordService {
   constructor(private prismaService: PrismaService) {}
 
-  //TODO: change landlord to userId
+  //
   async getLandlordUser(userId: number) {
     try {
       const landlord = await this.prismaService.landlord.findUnique({
@@ -24,8 +24,17 @@ export class LandlordService {
     }
   }
 
-  async create(user: User, landlord: LandlordDto) {
+  async create(landlord: CreateLandlordDto) {
     try {
+      //Create a new user for type landlord.[]
+      const user = await this.prismaService.user.create({
+        data: {
+          email: landlord.email,
+          name: landlord.name,
+          user_type: 'Landlord',
+          imageUrl: landlord.imageUrl,
+        },
+      });
       //Create a new landlord.
       const newLandlord = await this.prismaService.landlord.create({
         data: {

@@ -23,77 +23,78 @@ spec:
             - name: DATABASE_URL
               value: mysql://root:password@mysql:3306/rentals-db
 
----
-kind: Deployment
-apiVersion: apps/v1
-metadata:
-  name: houses
-spec:
-  selector:
-    matchLabels:
-      app: houses
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app: houses
-    spec:
-      containers:
-        - name: houses
-          image: apps/houses
-      env:
-          - name: JWT_SECRET
-            value: ksjhfkljshflkjhslkjdhalsdhf
-          - name: DATABASE_URL
-            value: mysql://root:password@mysql:3306/rentals-db
+# ---
+# kind: Deployment
+# apiVersion: apps/v1
+# metadata:
+#   name: houses
+# spec:
+#   selector:
+#     matchLabels:
+#       app: houses
+#   replicas: 1
+#   template:
+#     metadata:
+#       labels:
+#         app: houses
+#     spec:
+#       containers:
+#         - name: houses
+#           image: apps/houses
+#       env:
+#           - name: JWT_SECRET
+#             value: ksjhfkljshflkjhslkjdhalsdhf
+#           - name: DATABASE_URL
+#             value: mysql://root:password@mysql:3306/rentals-db
 
----
-kind: Deployment
-apiVersion: apps/v1
-metadata:
-  name: invoices
-spec:
-  selector:
-    matchLabels:
-      app: invoices
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app: invoices
-    spec:
-      containers:
-        - name: invoices
-          image: apps/invoices
-      env:
-          - name: JWT_SECRET
-            value: ksjhfkljshflkjhslkjdhalsdhf
-          - name: DATABASE_URL
-            value: mysql://root:password@mysql:3306/rentals-db
+# ---
+# kind: Deployment
+# apiVersion: apps/v1
+# metadata:
+#   name: invoices
+# spec:
+#   selector:
+#     matchLabels:
+#       app: invoices
+#   replicas: 1
+#   template:
+#     metadata:
+#       labels:
+#         app: invoices
+#     spec:
+#       containers:
+#         - name: invoices
+#           image: apps/invoices
+#       env:
+#           - name: JWT_SECRET
+#             value: ksjhfkljshflkjhslkjdhalsdhf
+#           - name: DATABASE_URL
+#             value: mysql://root:password@mysql:3306/rentals-db
 
----
-kind: Deployment
-apiVersion: apps/v1
-metadata:
-  name: payments
-spec:
-  selector:
-    matchLabels:
-      app: payments
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app: payments
-    spec:
-      containers:
-        - name: payments
-          image: apps/payments
-      env:
-            - name: JWT_SECRET
-              value: ksjhfkljshflkjhslkjdhalsdhf
-            - name: DATABASE_URL
-              value: mysql://root:password@mysql:3306/rentals-db
+# ---
+# kind: Deployment
+# apiVersion: apps/v1
+# metadata:
+#   name: payments
+# spec:
+#   selector:
+#     matchLabels:
+#       app: payments
+#   replicas: 1
+#   template:
+#     metadata:
+#       labels:
+#         app: payments
+#     spec:
+#       containers:
+#         - name: payments
+#           image: apps/payments
+#       env:
+#             - name: JWT_SECRET
+#               value: ksjhfkljshflkjhslkjdhalsdhf
+#             - name: DATABASE_URL
+#               value: mysql://root:password@mysql:3306/rentals-db
+
 
 ---
 kind: Deployment
@@ -113,9 +114,9 @@ spec:
       containers:
         - name: gateway
           image: apps/gateway
-      env:
-          - name: JWT_SECRET
-            value: ksjhfkljshflkjhslkjdhalsdhf
-          - name: DATABASE_URL
-            value: mysql://root:password@mysql:3306/rentals-db
+          env:
+            - name: JWT_SECRET
+              value: ksjhfkljshflkjhslkjdhalsdhf
+            - name: DATABASE_URL
+              value: mysql://root:password@mysql:3306/rentals-db
 

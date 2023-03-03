@@ -9,41 +9,41 @@ spec:
     - port: 4001
   type: ClusterIP
 
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: houses
-spec:
-  selector:
-    app: houses
-  ports:
-    - port: 4002
-  type: ClusterIP
+# ---
+# kind: Service
+# apiVersion: v1
+# metadata:
+#   name: houses
+# spec:
+#   selector:
+#     app: houses
+#   ports:
+#     - port: 4002
+#   type: ClusterIP
 
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: invoices
-spec:
-  selector:
-    app: invoices
-  ports:
-    - port: 4003
-  type: ClusterIP
+# ---
+# kind: Service
+# apiVersion: v1
+# metadata:
+#   name: invoices
+# spec:
+#   selector:
+#     app: invoices
+#   ports:
+#     - port: 4003
+#   type: ClusterIP
 
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: payments
-spec:
-  selector:
-    app: payments
-  ports:
-    - port: 4004
-  type: ClusterIP
+# ---
+# kind: Service
+# apiVersion: v1
+# metadata:
+#   name: payments
+# spec:
+#   selector:
+#     app: payments
+#   ports:
+#     - port: 4004
+#   type: ClusterIP
 
 ---
 kind: Service

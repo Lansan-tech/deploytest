@@ -1,12 +1,20 @@
 import { PrismaService } from '@app/common';
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { PropertyInput } from './Dtos/create-property.dto';
+import { User } from '../../users/src/entity/user.entity';
+import { CreatePropertyInput } from './Dtos/create-property.dto';
 
 @Injectable()
 export class HousesService {
   constructor(private prismaService: PrismaService) {}
-  async create(newProperty: PropertyInput) {
+  async create(user: User, newProperty: CreatePropertyInput) {
     try {
+      //Find the agnet with matching the current user.
+      const agent = await this.prismaService.agent.findUnique({
+        where: {
+          userId: user.id,
+        },
+      });
+      // Create and link the new property
       const createdProperty = await this.prismaService.property.create({
         data: {
           name: newProperty.name,
@@ -18,22 +26,29 @@ export class HousesService {
           },
           agent_property_agentToagent: {
             connect: {
-              username: newProperty.agentUsername,
+              agent: agent.agent,
             },
           },
           room: {
-            create: this.buildRentalUnits(newProperty),
+            create: {
+              uid: '234B',
+            },
           },
         },
+        include: {
+          room: true,
+        },
       });
-
+      console.log(createdProperty);
       return createdProperty;
     } catch (e) {
       throw new BadRequestException(e.message);
     }
   }
 
-  private buildRentalUnits(property: PropertyInput): any {
-    return property.rentalUnits;
+  private buildRentalUnits(property: CreatePropertyInput): any {
+    return property.rentalUnits.map((unit) => ({
+      uid: unit.uid,
+    }));
   }
 }

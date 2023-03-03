@@ -214,8 +214,8 @@ model econnection {
   room                              Int
   emeter                            Int
   rate                              Int?
-  start_date                        DateTime? @db.Date
-  end_date                          DateTime  @db.Date
+  start_date                        DateTime? @db.DateTime
+  end_date                          DateTime  @db.DateTime
   start_reading                     Int?
   share                             Int?
   room_econnection_roomToroom       room      @relation("econnection_roomToroom", fields: [room], references: [room], onDelete: NoAction, onUpdate: NoAction, map: "econnection_ibfk_1")
@@ -490,9 +490,9 @@ model water {
   wconnection                                Int
   invoice                                    Int
   serial_no                                  String?     @db.VarChar(255)
-  prev_date                                  DateTime?   @db.Date
+  prev_date                                  DateTime?   @db.DateTime
   prev_value                                 Float?
-  curr_date                                  DateTime?   @db.Date
+  curr_date                                  DateTime?   @db.DateTime
   curr_value                                 Float?
   consumption                                Float?
   rate                                       Float?
@@ -509,8 +509,8 @@ model wconnection {
   room                                 Int
   wmeter                               Int
   rate                                 Float?
-  start_date                           DateTime? @db.Date
-  end_date                             DateTime  @db.Date
+  start_date                           DateTime? @db.DateTime
+  end_date                             DateTime  @db.DateTime
   start_reading                        Int?
   end_reading                          Int?
   disconnected                         DateTime? @db.Date

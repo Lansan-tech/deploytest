@@ -1,13 +1,20 @@
 import { DynamicModule, INestApplication, NestModule } from '@nestjs/common';
+import request from 'supertest-graphql';
 import { Test } from '@nestjs/testing';
 import { AuthService } from '../../../../apps/auth/src/auth.service';
 import { AuthModule } from '../../../../apps/auth/src/auth.module';
 import { PrismaService } from '../prisma/prisma.service';
+import { UsersModule } from '../../../../apps/users/src/users.module';
+import { gql } from 'graphql-tag';
+import { DefaultAgent } from './stubs';
+
+type User = { name: string; email: string; imageUrl: string };
 
 export class IntergrationTestManager {
   private app: INestApplication;
   private accessToken: string;
   private appModule: any;
+  private usersApp: INestApplication;
   public httpServer: any;
   private authModule: INestApplication;
   public dbConnection: PrismaService;
@@ -15,7 +22,7 @@ export class IntergrationTestManager {
   constructor(appModule: any) {
     this.appModule = appModule;
   }
-  async beforeAll() {
+  async beforeAll(user: User) {
     const moduleRef = await Test.createTestingModule({
       imports: [this.appModule],
     }).compile();
@@ -37,14 +44,33 @@ export class IntergrationTestManager {
 
     //Login a user.
     const authService = this.authModule.get<AuthService>(AuthService);
-    const user = await authService.signUp({
-      email: 'santamulantei8@gmail.com',
-      imageUrl: 'http://localhost/image.png',
-      name: 'Santamu Lantei',
-    });
-    this.accessToken = user.access_token;
+    const userLogin = await authService.signUp(user);
+    this.accessToken = userLogin.access_token;
+
+    //await this.createDefaultAgentUser();
   }
 
+  async createDefaultAgentUser() {
+    const server = await this.intergrateToUserModule();
+    const response = await request(server)
+      .mutate(
+        gql`
+          mutation createAgent($createAgentData: CreateAgentDto!) {
+            createAgent(agentDto: $createAgentData) {
+              agent
+              username
+            }
+          }
+        `,
+      )
+      .variables({
+        createAgentData: {
+          ...DefaultAgent,
+        },
+      })
+      .set('authorization', `Bearer ${this.getAccessToken()}`)
+      .expectNoErrors();
+  }
   async afterAll() {
     await this.authModule.close();
     await this.app.close();
@@ -52,5 +78,17 @@ export class IntergrationTestManager {
 
   getAccessToken(): string {
     return this.accessToken;
+  }
+
+  //Return the server that correnspons to the Users module to allow intergration of data.
+  async intergrateToUserModule() {
+    const userModule = await Test.createTestingModule({
+      imports: [UsersModule],
+    }).compile();
+
+    this.usersApp = userModule.createNestApplication();
+    this.usersApp.init();
+
+    return this.usersApp.getHttpServer();
   }
 }
