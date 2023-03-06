@@ -49,9 +49,9 @@ const handleAuth = ({ req }) => {
         },
         supergraphSdl: new IntrospectAndCompose({
           subgraphs: [
-            { name: 'auth', url: 'http://auth:4001/graphql' },
+            // { name: 'auth', url: 'http://auth:4001/graphql' },
             // { name: 'invoices', url: 'http:localhost:7070/graphql' },
-            // { name: 'users', url: 'http:localhost:5050/graphql' },
+            { name: 'users', url: 'http:localhost:4005/graphql' },
           ],
         }),
       },

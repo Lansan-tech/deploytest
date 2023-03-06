@@ -1,8 +1,8 @@
 {
-  "name": "gateway",
+  "name": "rentals-backend",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "Lantei Raphael",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {

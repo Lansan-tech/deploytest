@@ -14,6 +14,7 @@ export class HousesService {
           userId: user.id,
         },
       });
+      console.log(user, agent);
       // Create and link the new property
       const createdProperty = await this.prismaService.property.create({
         data: {
@@ -29,17 +30,16 @@ export class HousesService {
               agent: agent.agent,
             },
           },
-          room: {
+          units: {
             create: {
               uid: '234B',
             },
           },
         },
         include: {
-          room: true,
+          units: true,
         },
       });
-      console.log(createdProperty);
       return createdProperty;
     } catch (e) {
       throw new BadRequestException(e.message);

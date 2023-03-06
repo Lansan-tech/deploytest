@@ -15,6 +15,6 @@ export class Property {
   name: string;
   @Field({ nullable: true })
   title: string;
-  @Field(() => RentalUnit)
-  room: RentalUnit;
+  @Field(() => [RentalUnit])
+  units: [RentalUnit];
 }

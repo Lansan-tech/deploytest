@@ -54,7 +54,7 @@ describe('Given that a property has been created', () => {
               createProperty(createProperty: $createPropertyData) {
                 title
                 uid
-                room {
+                units {
                   uid
                 }
               }
@@ -103,7 +103,7 @@ describe('Given that a property has been created', () => {
         .set('authentication', userToken)
         .variables({
           createWaterData: {
-            roomUid: room.room.uid,
+            roomUid: room.units[0].uid,
             waterMeterSerialNum: '2345-6758',
             waterReadingValue: 200,
           },

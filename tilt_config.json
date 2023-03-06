@@ -7,7 +7,6 @@
     "microservices": [
         "apps/auth",
         "apps/gateway"
-
     ],
     "namespace": "rentalsBackend",
     "port_forwards": [

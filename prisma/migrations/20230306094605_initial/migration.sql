@@ -32,8 +32,10 @@ CREATE TABLE `agent` (
     `username` VARCHAR(200) NOT NULL,
     `name` VARCHAR(100) NOT NULL,
     `title` VARCHAR(100) NOT NULL,
+    `userId` INTEGER NOT NULL,
 
     UNIQUE INDEX `username`(`username`),
+    UNIQUE INDEX `agent_userId_key`(`userId`),
     PRIMARY KEY (`agent`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -43,10 +45,10 @@ CREATE TABLE `agreement` (
     `room` INTEGER NOT NULL,
     `client` INTEGER NOT NULL,
     `amount` DOUBLE NULL,
-    `start_date` DATE NOT NULL,
+    `start_date` DATETIME NOT NULL,
     `duration` INTEGER NULL,
     `review` INTEGER NULL,
-    `terminated` DATE NULL,
+    `terminated` DATETIME NULL,
     `valid` INTEGER NOT NULL,
     `comment` VARCHAR(255) NULL,
 
@@ -60,13 +62,13 @@ CREATE TABLE `balance_initial` (
     `balance_initial` INTEGER NOT NULL AUTO_INCREMENT,
     `client` INTEGER NOT NULL,
     `invoice` INTEGER NULL,
-    `date_g` DATE NULL,
+    `date_g` DATETIME NULL,
     `amount_g` DOUBLE NULL,
     `amount_v` DOUBLE NULL,
     `amount` DOUBLE NULL,
     `date_v` DATE NULL,
     `comment` VARCHAR(255) NULL,
-    `date` DATE NOT NULL,
+    `date` DATETIME NOT NULL,
 
     INDEX `invoice`(`invoice`),
     UNIQUE INDEX `identification2`(`client`, `date`),
@@ -104,7 +106,7 @@ CREATE TABLE `changes` (
     `pk` INTEGER NOT NULL,
     `source` TEXT NOT NULL,
     `operation` ENUM('update', 'create', 'delete', '') NOT NULL,
-    `datetime` DATETIME(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `datetime` DATETIME(0) NOT NULL,
 
     UNIQUE INDEX `id`(`pk`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -134,8 +136,10 @@ CREATE TABLE `client` (
     `phone` VARCHAR(255) NULL,
     `address` VARCHAR(255) NULL,
     `email` VARCHAR(255) NULL,
+    `userId` INTEGER NOT NULL,
 
     UNIQUE INDEX `id5`(`name`),
+    UNIQUE INDEX `client_userId_key`(`userId`),
     PRIMARY KEY (`client`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -222,8 +226,8 @@ CREATE TABLE `econnection` (
     `room` INTEGER NOT NULL,
     `emeter` INTEGER NOT NULL,
     `rate` INTEGER NULL,
-    `start_date` DATE NULL,
-    `end_date` DATE NOT NULL,
+    `start_date` DATETIME NULL,
+    `end_date` DATETIME NOT NULL,
     `start_reading` INTEGER NULL,
     `share` INTEGER NULL,
 
@@ -284,7 +288,7 @@ CREATE TABLE `ereading` (
     `ereading` INTEGER NOT NULL AUTO_INCREMENT,
     `emeter` INTEGER NOT NULL,
     `invoice` INTEGER NULL,
-    `date` DATE NOT NULL,
+    `date` DATETIME NOT NULL,
     `value` DOUBLE NULL,
     `remark` VARCHAR(255) NULL,
 
@@ -321,10 +325,10 @@ CREATE TABLE `landlord` (
     `landlord` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(100) NULL,
     `title` INTEGER NULL,
-    `username` VARCHAR(200) NOT NULL,
+    `userId` INTEGER NOT NULL,
     `paybill` INTEGER NOT NULL,
 
-    UNIQUE INDEX `username`(`username`),
+    UNIQUE INDEX `landlord_userId_key`(`userId`),
     UNIQUE INDEX `paybill`(`paybill`),
     PRIMARY KEY (`landlord`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -418,7 +422,6 @@ CREATE TABLE `picture` (
 CREATE TABLE `property` (
     `property` INTEGER NOT NULL AUTO_INCREMENT,
     `uid` VARCHAR(200) NOT NULL,
-    `rental_unit` INTEGER NOT NULL,
     `landlord` INTEGER NOT NULL,
     `agent` INTEGER NULL,
     `caretaker` INTEGER NULL,
@@ -430,7 +433,7 @@ CREATE TABLE `property` (
     UNIQUE INDEX `agent_pk`(`agent`),
     UNIQUE INDEX `caretaker`(`caretaker`),
     UNIQUE INDEX `property_name`(`name`),
-    INDEX `property_ibfk_3`(`rental_unit`),
+    INDEX `property_ibfk_3`(`uid`),
     PRIMARY KEY (`property`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -471,6 +474,7 @@ CREATE TABLE `room` (
     `uid` VARCHAR(255) NOT NULL,
     `is_psuedo` INTEGER NOT NULL DEFAULT 0,
     `title` VARCHAR(255) NULL,
+    `property_id` INTEGER NOT NULL,
 
     UNIQUE INDEX `identification25`(`uid`),
     PRIMARY KEY (`room`)
@@ -507,9 +511,9 @@ CREATE TABLE `water` (
     `wconnection` INTEGER NOT NULL,
     `invoice` INTEGER NOT NULL,
     `serial_no` VARCHAR(255) NULL,
-    `prev_date` DATE NULL,
+    `prev_date` DATETIME NULL,
     `prev_value` DOUBLE NULL,
-    `curr_date` DATE NULL,
+    `curr_date` DATETIME NULL,
     `curr_value` DOUBLE NULL,
     `consumption` DOUBLE NULL,
     `rate` DOUBLE NULL,
@@ -526,8 +530,8 @@ CREATE TABLE `wconnection` (
     `room` INTEGER NOT NULL,
     `wmeter` INTEGER NOT NULL,
     `rate` DOUBLE NULL,
-    `start_date` DATE NULL,
-    `end_date` DATE NOT NULL,
+    `start_date` DATETIME NULL,
+    `end_date` DATETIME NOT NULL,
     `start_reading` INTEGER NULL,
     `end_reading` INTEGER NULL,
     `disconnected` DATE NULL,
@@ -580,10 +584,32 @@ CREATE TABLE `user` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(45) NOT NULL,
     `email` VARCHAR(45) NOT NULL,
-    `user_type` VARCHAR(45) NULL DEFAULT 'CLIENT',
+    `imageUrl` VARCHAR(255) NULL,
+    `user_type` VARCHAR(45) NULL DEFAULT 'AGENT',
 
     UNIQUE INDEX `email_UNIQUE`(`email`),
     PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `user_type` (
+    `user_type` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(191) NOT NULL,
+    `description` VARCHAR(191) NULL,
+
+    UNIQUE INDEX `user_type_name_key`(`name`),
+    PRIMARY KEY (`user_type`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `role` (
+    `role` INTEGER NOT NULL AUTO_INCREMENT,
+    `title` VARCHAR(191) NOT NULL,
+    `description` VARCHAR(191) NULL,
+    `user_id` INTEGER NOT NULL,
+
+    UNIQUE INDEX `role_title_key`(`title`),
+    PRIMARY KEY (`role`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
@@ -594,6 +620,9 @@ ALTER TABLE `accumulator` ADD CONSTRAINT `accumulator_ibfk_2` FOREIGN KEY (`loan
 
 -- AddForeignKey
 ALTER TABLE `accumulator` ADD CONSTRAINT `accumulator_ibfk_3` FOREIGN KEY (`invoice`) REFERENCES `invoice`(`invoice`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `agent` ADD CONSTRAINT `agent_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `agreement` ADD CONSTRAINT `agreement_ibfk_1` FOREIGN KEY (`room`) REFERENCES `room`(`room`) ON DELETE NO ACTION ON UPDATE NO ACTION;
@@ -612,6 +641,9 @@ ALTER TABLE `charge` ADD CONSTRAINT `charge_ibfk_1` FOREIGN KEY (`service`) REFE
 
 -- AddForeignKey
 ALTER TABLE `charge` ADD CONSTRAINT `charge_ibfk_2` FOREIGN KEY (`invoice`) REFERENCES `invoice`(`invoice`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `client` ADD CONSTRAINT `client_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `closing_balance` ADD CONSTRAINT `closing_balance_ibfk_1` FOREIGN KEY (`invoice`) REFERENCES `invoice`(`invoice`) ON DELETE NO ACTION ON UPDATE NO ACTION;
@@ -671,6 +703,9 @@ ALTER TABLE `invoice` ADD CONSTRAINT `invoice_ibfk_1` FOREIGN KEY (`client`) REF
 ALTER TABLE `invoice` ADD CONSTRAINT `invoice_ibfk_2` FOREIGN KEY (`period`) REFERENCES `period`(`period`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
+ALTER TABLE `landlord` ADD CONSTRAINT `landlord_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `loan` ADD CONSTRAINT `loan_ibfk_1` FOREIGN KEY (`agreement`) REFERENCES `agreement`(`agreement`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
@@ -695,9 +730,6 @@ ALTER TABLE `property` ADD CONSTRAINT `property_ibfk_1` FOREIGN KEY (`landlord`)
 ALTER TABLE `property` ADD CONSTRAINT `property_ibfk_2` FOREIGN KEY (`agent`) REFERENCES `agent`(`agent`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE `property` ADD CONSTRAINT `property_ibfk_3` FOREIGN KEY (`rental_unit`) REFERENCES `room`(`room`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
--- AddForeignKey
 ALTER TABLE `rent` ADD CONSTRAINT `rent_ibfk_1` FOREIGN KEY (`invoice`) REFERENCES `invoice`(`invoice`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
@@ -708,6 +740,9 @@ ALTER TABLE `repayment` ADD CONSTRAINT `invoice_fk` FOREIGN KEY (`invoice`) REFE
 
 -- AddForeignKey
 ALTER TABLE `repayment` ADD CONSTRAINT `loan_fk` FOREIGN KEY (`loan`) REFERENCES `loan`(`loan`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `room` ADD CONSTRAINT `property_ibfk_3` FOREIGN KEY (`property_id`) REFERENCES `property`(`property`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
 ALTER TABLE `service` ADD CONSTRAINT `service_property_id_fkey` FOREIGN KEY (`property_id`) REFERENCES `property`(`property`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -735,3 +770,6 @@ ALTER TABLE `wreading` ADD CONSTRAINT `wreading_ibfk_1` FOREIGN KEY (`wmeter`) R
 
 -- AddForeignKey
 ALTER TABLE `wreading` ADD CONSTRAINT `wreading_ibfk_2` FOREIGN KEY (`invoice`) REFERENCES `invoice`(`invoice`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `role` ADD CONSTRAINT `role_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -29,6 +29,7 @@ export type InputType =
   | 'file';
 
 export type Step = {
+  title: string;
   tableName: string;
   populate?: boolean;
   isMultiple?: boolean;
@@ -37,5 +38,5 @@ export type Step = {
 };
 
 export interface Flow {
-  [key: string]: Step;
+  steps: Step[];
 }

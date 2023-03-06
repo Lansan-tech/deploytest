@@ -42,10 +42,10 @@ model agreement {
   room                            Int
   client                          Int
   amount                          Float?
-  start_date                      DateTime  @db.DateTime @default(now())
+  start_date                      DateTime  @db.DateTime
   duration                        Int?
   review                          Int?
-  terminated                      DateTime? @db.DateTime @default(now())
+  terminated                      DateTime? @db.DateTime
   valid                           Int
   comment                         String?   @db.VarChar(255)
   room_agreement_roomToroom       room      @relation("agreement_roomToroom", fields: [room], references: [room], onDelete: NoAction, onUpdate: NoAction, map: "agreement_ibfk_1")
@@ -61,13 +61,13 @@ model balance_initial {
   balance_initial                          Int       @id @default(autoincrement())
   client                                   Int
   invoice                                  Int?
-  date_g                                   DateTime? @db.Date  @default(now())
+  date_g                                   DateTime? @db.DateTime
   amount_g                                 Float?
   amount_v                                 Float?
   amount                                   Float?
-  date_v                                   DateTime? @db.Date @default(now())
+  date_v                                   DateTime? @db.Date
   comment                                  String?   @db.VarChar(255)
-  date                                     DateTime  @db.Date  @default(now())
+  date                                     DateTime  @db.DateTime
   client_balance_initial_clientToclient    client    @relation("balance_initial_clientToclient", fields: [client], references: [client], onDelete: NoAction, onUpdate: NoAction, map: "balance_initial_ibfk_1")
   invoice_balance_initial_invoiceToinvoice invoice?  @relation("balance_initial_invoiceToinvoice", fields: [invoice], references: [invoice], onDelete: NoAction, onUpdate: NoAction, map: "balance_initial_ibfk_2")
 
@@ -96,7 +96,7 @@ model changes {
   pk        Int               @unique(map: "id")
   source    String            @db.Text
   operation changes_operation
-  datetime  DateTime          @default(now()) @db.DateTime(0)
+  datetime  DateTime          @db.DateTime(0)
 }
 
 model charge {
@@ -274,7 +274,7 @@ model ereading {
   ereading                          Int      @id @default(autoincrement())
   emeter                            Int
   invoice                           Int?
-  date                              DateTime @db.Date
+  date                              DateTime @db.DateTime
   value                             Float?
   remark                            String?  @db.VarChar(255)
   emeter_ereading_emeterToemeter    emeter   @relation("ereading_emeterToemeter", fields: [emeter], references: [emeter], onDelete: NoAction, onUpdate: NoAction, map: "ereading_ibfk_1")
@@ -371,7 +371,7 @@ model payment {
   payment                          Int      @id @default(autoincrement())
   client                           Int
   invoice                          Int?
-  date                             DateTime @db.Date @default(now())
+  date                             DateTime @db.Date
   bank                             String?  @db.VarChar(255)
   amount                           Float?
   type                             String?  @db.VarChar(20)
@@ -407,8 +407,7 @@ model picture {
 
 model property {
   property                             Int       @id @default(autoincrement())
-  uid                                  String    @unique(map: "uid") @db.VarChar(200)
-  rental_unit                          Int
+  uid                                  String    @unique(map: "uid") @default(uuid()) @db.VarChar(200)
   landlord                             Int       @unique(map: "landlord_pk")
   agent                                Int?      @unique(map: "agent_pk")
   caretaker                            Int?      @unique(map: "caretaker")
@@ -416,10 +415,10 @@ model property {
   location                             String?   @db.VarChar(100)
   landlord_property_landlordTolandlord landlord  @relation("property_landlordTolandlord", fields: [landlord], references: [landlord], onDelete: NoAction, onUpdate: NoAction, map: "property_ibfk_1")
   agent_property_agentToagent          agent?    @relation("property_agentToagent", fields: [agent], references: [agent], onDelete: NoAction, onUpdate: NoAction, map: "property_ibfk_2")
-  room                                 room      @relation(fields: [rental_unit], references: [room], onDelete: NoAction, onUpdate: NoAction, map: "property_ibfk_3")
+  units                                room[]
   services                             service[]
 
-  @@index([rental_unit], map: "property_ibfk_3")
+  @@index([uid], map: "property_ibfk_3")
 }
 
 model rent {
@@ -457,7 +456,8 @@ model room {
   agreement_agreement_roomToroom     agreement[]   @relation("agreement_roomToroom")
   econnection_econnection_roomToroom econnection[] @relation("econnection_roomToroom")
   picture_picture_roomToroom         picture[]     @relation("picture_roomToroom")
-  property                           property[]
+  property_id                        Int
+  property                           property      @relation(fields: [property_id], references: [property], onDelete: NoAction, onUpdate: NoAction, map: "property_ibfk_3")
   wconnection_wconnection_roomToroom wconnection[] @relation("wconnection_roomToroom")
 }
 
@@ -562,9 +562,27 @@ model user {
   imageUrl  String? @db.VarChar(255)
   user_type String? @default("AGENT") @db.VarChar(45)
 
+  roles  role[]
   client   client?
   landlord landlord?
   agent    agent?
+}
+
+model user_type {
+  user_type Int @id @default(autoincrement())
+  name String @unique
+  description  String?
+
+  
+}
+
+model role {
+  role Int @id @default(autoincrement())
+  title String @unique
+  description String?
+  user_id  Int
+
+  user user @relation(fields: [user_id], references: [id])
 }
 
 enum changes_operation {

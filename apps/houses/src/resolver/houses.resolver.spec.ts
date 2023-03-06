@@ -20,20 +20,23 @@ describe('HousesResolver', () => {
 
   test('Create  new proerty', async () => {
     jest.spyOn(resolver, 'createProperty').mockImplementation(async () => ({
-      uid: 'onebedroomProperty',
+      uid: '234B',
+      property: 1,
       agent: 1,
       caretaker: null,
       landlord: 1,
       location: 'Donhome',
       name: 'Savanah Estate',
-      property: 1,
       rental_unit: 2,
-      room: {
-        is_psuedo: 0,
-        room: 1,
-        title: '',
-        uid: '',
-      },
+      units: [
+        {
+          property_id: 1,
+          is_psuedo: 0,
+          room: 1,
+          title: '',
+          uid: '',
+        },
+      ],
     }));
 
     const response = await resolver.createProperty(UserStub, {
